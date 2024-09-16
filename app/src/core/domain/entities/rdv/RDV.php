@@ -5,12 +5,12 @@ namespace toubeelib\core\domain\entities\rdv;
 use toubeelib\core\domain\entities\Entity;
 
 class RDV extends Entity{
-    protected DateTime dateHeure;
-    protected int duree = 30;
-    protected String practicienID;
-    protected String patientID;
-    protected String statut;
-    protected String type;
+    protected DateTime $dateHeure;
+    protected int $duree = 30;
+    protected String $practicienID;
+    protected String $patientID;
+    protected String $statut;
+    protected String $type;
 
     public function __construct(DateTime $dateHeure, String $practicienID,
     String $patientID, String $type){

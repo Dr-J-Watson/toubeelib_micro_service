@@ -13,7 +13,7 @@ interface ServiceRDVInterface
     /**
      * @return RDVDTO[]
      */
-    public function getRDV(string $idRDV): array;
+    public function getRDV(string $idRDV): RDVDTO;
 
     public function updateRDV(InputRDVDTO $p): RDVDTO;
 
