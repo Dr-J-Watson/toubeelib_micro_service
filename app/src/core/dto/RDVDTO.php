@@ -4,8 +4,8 @@ namespace toubeelib\core\dto;
 use toubeelib\core\domain\entities\rdv\RDV;
 
 class RDVDTO extends DTO{
-    protected ID $ID;
-    protected DateTime $dateHeure;
+    protected String $ID;
+    protected \DateTimeInterface $dateHeure;
     protected int $duree = 30;
     protected String $practicienID;
     protected String $patientID;
@@ -13,7 +13,6 @@ class RDVDTO extends DTO{
     protected String $type;
 
     public function __construct(RDV $rdv){
-        $rdv = $rdv->toDTO();
         $this->ID = $rdv->ID;
         $this->dateHeure = $rdv->dateHeure;
         $this->duree = $rdv->duree;

@@ -29,7 +29,7 @@ class ArrayRdvRepository implements RDVRepositoryInterface
         return $rdv;
     }
 
-    public function getRDVById(string $id): RDVDTO
+    public function getRDVById(string $id): RDV
     {
         if (!isset($this->rdvs[$id])) {
             throw new RepositoryEntityNotFoundException("RDV with id $id not found");
