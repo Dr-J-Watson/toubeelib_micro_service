@@ -19,9 +19,9 @@ interface ServiceRDVInterface
 
     public function cancelRDV(string $idRDV): void;
 
-    public function getRDVByPraticien(string $idPraticien): RDVDTO;
+    public function getRDVByPraticien(string $idPraticien): array;
 
-    public function getRDVByPatient(string $idPatient): RDVDTO;
+    public function getRDVByPatient(string $idPatient): array;
 
     // TODO add a method getRDVByPatient
 
