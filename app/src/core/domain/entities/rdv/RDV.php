@@ -5,6 +5,7 @@ namespace toubeelib\core\domain\entities\rdv;
 use toubeelib\core\domain\entities\Entity;
 
 class RDV extends Entity{
+    
     protected DateTime dateHeure;
     protected int duree = 30;
     protected String practicienID;
@@ -28,4 +29,8 @@ class RDV extends Entity{
     public function toDTO(): RDVDTO{
         return new RDVDTO($this);
     }
+
+
+
+
 }
