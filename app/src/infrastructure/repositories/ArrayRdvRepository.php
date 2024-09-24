@@ -34,6 +34,7 @@ class ArrayRdvRepository implements RDVRepositoryInterface
         if (!isset($this->rdvs[$id])) {
             throw new RepositoryEntityNotFoundException("RDV with id $id not found");
         }
+        echo $this->rdvs[$id];
         return $this->rdvs[$id];
     }
 

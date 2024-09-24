@@ -20,7 +20,11 @@ class GetRDVAction extends AbstractAction{
         
         try{
             $rdv = $this->serviceRDV->getRDVById($args['id']);
-            return CorsUtility::handle($rq, $rs, $rdv);
+            print(json_encode($rdv));
+            return CorsUtility::handle($rq, $rs, json_encode($rdv));
+        }
+        catch(\Exception $e){
+            return CorsUtility::handle($rq, $rs, $e, 500);
         }
 
     }
