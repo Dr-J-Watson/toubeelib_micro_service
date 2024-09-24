@@ -10,5 +10,11 @@ return function( \Slim\App $app):\Slim\App {
 
     $app->get('/rdvs/{id}[/]', \toubeelib\application\actions\GetRDVAction::class)->setName('getRDV');
 
+    //cancel rdv 
+    $app->patch('/rdvs/{id}/cancel[/]', \toubeelib\application\actions\CancelRDVAction::class)->setName('cancelRDV');
+
+
+
+
     return $app;
 };

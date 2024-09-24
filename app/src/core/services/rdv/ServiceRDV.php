@@ -32,10 +32,11 @@ class ServiceRDV implements ServiceRDVInterface{
         return $rdv->toDTO();
     }
 
-    public function cancelRDV(string $idRDV): void{
+    public function cancelRDV(string $idRDV): RDVDTO{
         $rdv = $this->rdvRepository->getRDVById($idRDV);
         $rdv->setStatut('CANCEL');
-        $this->rdvRepository->save($rdv);
+        $updatedRdv = $this->rdvRepository->save($rdv);
+        return $updatedRdv->toDTO();
     }
 
     public function updateRDV(InputRDVDTO $p): RDVDTO{

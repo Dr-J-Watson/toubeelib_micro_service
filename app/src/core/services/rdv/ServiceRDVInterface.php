@@ -14,7 +14,7 @@ interface ServiceRDVInterface
 
     public function updateRDV(InputRDVDTO $p): RDVDTO;
 
-    public function cancelRDV(string $idRDV): void;
+    public function cancelRDV(string $idRDV): RDVDTO;
 
     /**
      * @return RDVDTO[]

@@ -7,10 +7,10 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use toubeelib\core\services\rdv\ServiceRDVInterface;
 use toubeelib\core\repositoryInterfaces\RDVRepositoryInterface;
 use toubeelib\application\utils\CorsUtility;
-use toubeelib\application\utils\JsonRenderer;
 
 
-class GetRDVAction extends AbstractAction{
+
+class CancelRDVAction extends AbstractAction{
 
     private ServiceRDVInterface $serviceRDV;
 
@@ -21,7 +21,7 @@ class GetRDVAction extends AbstractAction{
     public function __invoke(Request $rq, Response $rs, $args): Response{
         
         try{
-            $rdv = $this->serviceRDV->getRDVById($args['id']);
+            $rdv = $this->serviceRDV->cancelRDV($args['id']);
 
             $rdvformated = [
                 'ID' => $rdv->ID,
