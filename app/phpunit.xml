@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    bootstrap="vendor/autoload.php"
+    colors="true"                     
+    verbose="true"                    
+    beStrictAboutTestsThatDoNotTestAnything="true"
+    beStrictAboutOutputDuringTests="true"
+    stopOnFailure="false"             
+    testdox="true">                   <!-- Active le mode TestDox pour une sortie plus lisible -->
+
+    <!-- Définition des suites de tests -->
+    <testsuites>
+        <testsuite name="Application Test Suite">
+            <directory>tests</directory>  <!-- Dossier contenant les tests -->
+        </testsuite>
+    </testsuites>
+
+</phpunit>
