@@ -10,6 +10,11 @@ interface RDVRepositoryInterface
 {
     public function save(RDV $rdv): RDV;
     public function getRDVById(string $id): RDV;
-    public function getRDVByPraticienId(string $id): array;
+    
+    /**
+     * @return RDVDTO[]
+     */
+    public function getRDVByPraticienId(string $id, ?string $dateDebut, ?string $dateFin ): array;
+    
     public function getRDVByPatientId(string $id): array;
 }

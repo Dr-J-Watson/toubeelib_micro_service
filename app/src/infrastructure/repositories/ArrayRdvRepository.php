@@ -37,15 +37,19 @@ class ArrayRdvRepository implements RDVRepositoryInterface
         return $this->rdvs[$id];
     }
 
-    public function getRDVByPraticienId(string $id): array
+    /**
+     * @return RDVDTO[]
+     */
+    public function getRDVByPraticienId(string $pid, $dateDebut, $dateFin): array
     {
         $rdvs = [];
         foreach ($this->rdvs as $rdv) {
-            if ($rdv->getPraticienId() === $id) {
-                $rdvs[] = $rdv;
+            if ($rdv->getPraticienId() === $pid) {
+                $rdvs[] = $rdv->toDTO();
             }
         }
         return $rdvs;
+
     }
 
     public function getRDVByPatientId(string $id): array

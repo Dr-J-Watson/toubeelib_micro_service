@@ -39,4 +39,8 @@ class RDV extends Entity{
         $this->type = $type;
         $this->statut = $statut;
     }
+
+    public function getPraticienId(){
+        return $this->practicienID;
+    }
 }

@@ -46,8 +46,11 @@ class ServiceRDV implements ServiceRDVInterface{
         return $rdv->toDTO();
     }
 
-    public function getRDVByPraticien(string $idPraticien): array{
-        return $this->rdvRepository->getRDVByPraticienId($idPraticien);
+    /**
+     * @return RDVDTO[]
+     */
+    public function getRDVByPraticien(string $idPraticien, ?string $dateDebut, ?string $dateFin): array{
+        return $this->rdvRepository->getRDVByPraticienId($idPraticien, $dateDebut, $dateFin);
     }
 
     public function getRDVByPatient(string $idPatient): array{

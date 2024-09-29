@@ -19,7 +19,7 @@ interface ServiceRDVInterface
     /**
      * @return RDVDTO[]
      */
-    public function getRDVByPraticien(string $idPraticien): array;
+    public function getRDVByPraticien(string $idPraticien, ?string $dateDebut, ?string $dateFin): array;
 
     /**
      * @return RDVDTO[]

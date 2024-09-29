@@ -2,8 +2,10 @@
 
 namespace toubeelib\application\actions;
 
+use PHPUnit\Util\Json;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use toubeelib\application\renderer\JsonRenderer;
 use toubeelib\core\services\rdv\ServiceRDVInterface;
 use toubeelib\core\repositoryInterfaces\RDVRepositoryInterface;
 use toubeelib\application\utils\CorsUtility;
@@ -22,23 +24,13 @@ class CancelRDVAction extends AbstractAction{
         
         try{
             $rdv = $this->serviceRDV->cancelRDV($args['id']);
-
-            $rdvformated = [
-                'ID' => $rdv->ID,
-                'dateHeure' => $rdv->dateHeure,
-                'duree' => $rdv->duree,
-                'practicienID' => $rdv->practicienID,
-                'patientID' => $rdv->patientID,
-                'statut' => $rdv->statut,
-                'type' => $rdv->type
-            ];
     
             $responseContent = [
                 'type' => 'rdv',
-                'data' => $rdvformated
+                'data' => $rdv
             ];
-    
-            return CorsUtility::handle($rq, $rs, $responseContent);
+
+            return JsonRenderer::render($rs, 200, $responseContent);
 
         }catch(\Exception $e){
             throw new \Exception("RDV not found", 404);

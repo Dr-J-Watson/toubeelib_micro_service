@@ -3,7 +3,7 @@
 namespace toubeelib\core\dto;
 use toubeelib\core\domain\entities\rdv\RDV;
 
-class RDVDTO extends DTO{
+class RDVDTO extends DTO implements \JsonSerializable{
     protected String $ID;
     protected \DateTimeInterface $dateHeure;
     protected int $duree = 30;
@@ -20,5 +20,17 @@ class RDVDTO extends DTO{
         $this->patientID = $rdv->patientID;
         $this->statut = $rdv->statut;
         $this->type = $rdv->type;
+    }
+
+    public function jsonSerialize(): array{
+        return [
+            'ID' => $this->ID,
+            'dateHeure' => $this->dateHeure->format('Y-m-d H:i:s'),
+            'duree' => $this->duree,
+            'practicienID' => $this->practicienID,
+            'patientID' => $this->patientID,
+            'statut' => $this->statut,
+            'type' => $this->type
+        ];
     }
 }
