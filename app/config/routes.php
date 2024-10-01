@@ -16,8 +16,6 @@ return function( \Slim\App $app):\Slim\App {
     // get pratitient disponibility between two dates 
     $app->get('/praticiens/{id}/disponibility[/]', \toubeelib\application\actions\GetPraticienDisponibilityAction::class)->setName('getPraticienDisponibility');
 
-    
-
 
     return $app;
 };

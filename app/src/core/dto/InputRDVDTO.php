@@ -3,14 +3,14 @@
 namespace toubeelib\core\dto;
 
 class InputRDVDTO extends DTO{
-    protected \DateTime $dateHeure;
+    protected \DateTimeImmutable $dateHeure;
     protected int $duree = 30;
     protected String $practicienID;
     protected String $patientID;
     protected String $type;
     protected String $statut;
 
-    public function __construct(\DateTime $dateHeure, String $practicienID, String $patientID, String $type, String $statut){
+    public function __construct(\DateTimeImmutable $dateHeure, String $practicienID, String $patientID, String $type, String $statut){
         $this->dateHeure = $dateHeure;
         $this->practicienID = $practicienID;
         $this->patientID = $patientID;
@@ -18,7 +18,7 @@ class InputRDVDTO extends DTO{
         $this->statut = $statut ?? 'OK';
     }
 
-    public function getDateHeure(): \DateTime {
+    public function getDateHeure(): \DateTimeImmutable {
         return $this->dateHeure;
     }
 
