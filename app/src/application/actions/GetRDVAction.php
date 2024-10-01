@@ -22,7 +22,7 @@ class GetRDVAction extends AbstractAction{
         
         try{
             $rdv = $this->serviceRDV->getRDVById($args['id']);
-    
+
             $responseContent = [
                 'type' => 'rdv',
                 'data' => $rdv

@@ -10,7 +10,6 @@ use toubeelib\core\repositoryInterfaces\RepositoryEntityNotFoundException;
 
 class ArrayPraticienRepository implements PraticienRepositoryInterface
 {
-
     const SPECIALITES = [
         'A' => [
             'ID' => 'A',
@@ -53,7 +52,6 @@ class ArrayPraticienRepository implements PraticienRepositoryInterface
         $this->praticiens['p3'] = new Praticien( 'Martin', 'Marie', '3lassou', '0123456789');
         $this->praticiens['p3']->setSpecialite(new Specialite('C', 'Généraliste', 'Médecin généraliste'));
         $this->praticiens['p3']->setID('p3');
-
     }
     public function getSpecialiteById(string $id): Specialite
     {
@@ -64,13 +62,14 @@ class ArrayPraticienRepository implements PraticienRepositoryInterface
         return new Specialite($specialite['ID'], $specialite['label'], $specialite['description']);
     }
 
-    public function save(Praticien $praticien): string
+    public function save(Praticien $praticien, string $speciliteId): Praticien
     {
         // TODO : prévoir le cas d'une mise à jour - le praticient possède déjà un ID
 		$ID = Uuid::uuid4()->toString();
         $praticien->setID($ID);
+        $praticien->setSpecialite($this->getSpecialiteById($speciliteId));
         $this->praticiens[$ID] = $praticien;
-        return $ID;
+        return $praticien;
     }
 
     public function getPraticienById(string $id): Praticien

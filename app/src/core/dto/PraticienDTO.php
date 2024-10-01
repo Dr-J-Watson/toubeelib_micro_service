@@ -5,7 +5,7 @@ namespace toubeelib\core\dto;
 use toubeelib\core\domain\entities\praticien\Praticien;
 use toubeelib\core\dto\DTO;
 
-class PraticienDTO extends DTO
+class PraticienDTO extends DTO implements \JsonSerializable
 {
     protected string $ID;
     protected string $nom;
@@ -22,6 +22,18 @@ class PraticienDTO extends DTO
         $this->adresse = $p->adresse;
         $this->tel = $p->tel;
         $this->specialite_label = $p->specialite->label;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'ID' => $this->ID,
+            'nom' => $this->nom,
+            'prenom' => $this->prenom,
+            'adresse' => $this->adresse,
+            'tel' => $this->tel,
+            'specialite_label' => $this->specialite_label
+        ];
     }
 
 

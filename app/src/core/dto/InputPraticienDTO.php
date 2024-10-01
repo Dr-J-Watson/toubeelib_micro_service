@@ -18,5 +18,4 @@ class InputPraticienDTO extends DTO
         $this->tel = $tel;
         $this->specialite = $specialite;
     }
-
 }

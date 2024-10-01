@@ -21,10 +21,13 @@ class ServicePraticien implements ServicePraticienInterface
 
     public function createPraticien(InputPraticienDTO $p): PraticienDTO
     {
-        // TODO : valider les données et créer l'entité
-        return new PraticienDTO($praticien);
-
-
+        try {
+            $praticien = new Praticien($p->nom, $p->prenom, $p->adresse, $p->tel);
+            $SavedPraticien = $this->praticienRepository->save($praticien, $p->specialite);
+        } catch(NestedValidationException $e) {
+            throw new ServicePraticienInvalidDataException($e->getMessages());
+        }
+        return $SavedPraticien->toDTO();
     }
 
     public function getPraticienById(string $id): PraticienDTO
