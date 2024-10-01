@@ -13,7 +13,7 @@ use toubeelib\application\actions\CreatePraticienAction;
 
 return [
     'log.rdv.name' => 'toubeelib.log',
-    'log.rdv.file' => __DIR__ . '/log/toubeelib.error.log',
+    'log.rdv.file' => __DIR__ . '/log/toubeelib.rdv.log',
     'log.rdv.level' => \Monolog\Level::Debug,
 
     'logger.rdv' => function(ContainerInterface $c) {
@@ -37,7 +37,7 @@ return [
     },
 
     RDVRepositoryInterface::class => function(ContainerInterface $c){
-        return new \toubeelib\infrastructure\repositories\ArrayRDVRepository();
+        return new \toubeelib\infrastructure\repositories\ArrayRdvRepository();
     },
 
     PraticienRepositoryInterface::class => function(ContainerInterface $c){
@@ -46,7 +46,6 @@ return [
 
     ServiceRDVInterface::class => function(ContainerInterface $c){
         return new \toubeelib\core\services\rdv\ServiceRDV($c->get(RDVRepositoryInterface::class),
-                                                                $c->get(ServicePraticienInterface::class),
                                                                 $c->get('logger.rdv'));
     },
 

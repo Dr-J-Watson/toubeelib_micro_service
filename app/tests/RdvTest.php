@@ -24,7 +24,7 @@ class RdvTest extends TestCase{
     public function testCreateRDVInvalideDate(){
 
         $s = new InputRDVDTO( \DateTimeImmutable::createFromFormat('Y-m-d H:i','2024-09-02 09:00'), 'pa1', 'p1', 'A', 'OK');
-        $res = $this->service->createRDV($s);
+        $this->service->createRDV($s);
 
         $this->expectException(Exeception::class);
     }
@@ -43,7 +43,7 @@ class RdvTest extends TestCase{
     public function testCreateRDVInvalidPractitien(){
 
         $s = new InputRDVDTO( \DateTimeImmutable::createFromFormat('Y-m-d H:i','2024-11-02 10:00'), '22233244', 'p1', 'A', 'OK');
-        $res = $this->service->createRDV($s);
+        $this->service->createRDV($s);
 
         $this->expectException(Exception::class);
 
@@ -64,7 +64,7 @@ class RdvTest extends TestCase{
     public function testCreateRDVInvalidType(){
 
         $s = new InputRDVDTO( \DateTimeImmutable::createFromFormat('Y-m-d H:i','2024-11-02 10:00'), '22233244', 'p1', 'D', 'OK');
-        $res = $this->service->createRDV($s);
+        $this->service->createRDV($s);
 
         $this->expectException(Exception::class);
 
@@ -89,7 +89,7 @@ class RdvTest extends TestCase{
         $s2 = new InputRDVDTO( \DateTimeImmutable::createFromFormat('Y-m-d H:i','2024-11-02 10:00'), 'toto', 'titi', 'B', 'OK');
         $res2 = $this->service->createRDV($s2);
 
-        $res2 = $this->service->updateRDV($res2);
+        $this->service->updateRDV($res2);
 
         $this->assertEquals('B',$res2->__get('type'));
     }

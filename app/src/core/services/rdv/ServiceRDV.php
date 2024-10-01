@@ -3,6 +3,7 @@
 namespace toubeelib\core\services\rdv;
 
 use Faker\Core\Uuid;
+use Monolog\Logger;
 use toubeelib\core\domain\entities\rdv\RDV;
 use toubeelib\core\dto\InputRDVDTO;
 use toubeelib\core\dto\RDVDTO;
@@ -11,9 +12,9 @@ use Psr\Log\LoggerInterface;
 
 class ServiceRDV implements ServiceRDVInterface{
     private RDVRepositoryInterface $rdvRepository;
-    private LoggerInterface $logger;
+    private $logger;
 
-    public function __construct(RDVRepositoryInterface $rdvRepository, LoggerInterface $logger){
+    public function __construct(RDVRepositoryInterface $rdvRepository, Logger $logger){
         $this->rdvRepository = $rdvRepository;
         $this->logger = $logger;
     }
@@ -40,7 +41,7 @@ class ServiceRDV implements ServiceRDVInterface{
         $rdv = $this->rdvRepository->getRDVById($idRDV);
         $rdv->setStatut('CANCEL');
         $updatedRdv = $this->rdvRepository->save($rdv);
-        $this->logger->info('RDV cancelled: ', ['rdv' => $updatedRdv]);
+        $this->logger->info('RDV cancelled: ', ['IdRdv' => $updatedRdv->__get('ID')]);
         return $updatedRdv->toDTO();
     }
 
