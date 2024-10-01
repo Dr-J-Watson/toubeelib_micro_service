@@ -7,18 +7,22 @@ use toubeelib\core\domain\entities\rdv\RDV;
 use toubeelib\core\dto\InputRDVDTO;
 use toubeelib\core\dto\RDVDTO;
 use toubeelib\core\repositoryInterfaces\RDVRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
 class ServiceRDV implements ServiceRDVInterface{
     private RDVRepositoryInterface $rdvRepository;
+    private LoggerInterface $logger;
 
-    public function __construct(RDVRepositoryInterface $rdvRepository){
+    public function __construct(RDVRepositoryInterface $rdvRepository, LoggerInterface $logger){
         $this->rdvRepository = $rdvRepository;
+        $this->logger = $logger;
     }
 
     public function createRDV(InputRDVDTO $p): RDVDTO{
         $rdv = new RDV($p->getPracticienID(),$p->getPatientID(), $p->getType(), $p->getDateHeure());
-        $id = $this->rdvRepository->save($rdv);
         $rdv->setID(uniqid());
+        $this->rdvRepository->save($rdv);
+        $this->logger->info('RDV created: ',['rdv' => $rdv]);
         return $rdv->toDTO();
     }
 
@@ -36,6 +40,7 @@ class ServiceRDV implements ServiceRDVInterface{
         $rdv = $this->rdvRepository->getRDVById($idRDV);
         $rdv->setStatut('CANCEL');
         $updatedRdv = $this->rdvRepository->save($rdv);
+        $this->logger->info('RDV cancelled: ', ['rdv' => $updatedRdv]);
         return $updatedRdv->toDTO();
     }
 
@@ -43,6 +48,7 @@ class ServiceRDV implements ServiceRDVInterface{
         $rdv = $this->rdvRepository->getRDVById($p->id);
         $rdv->update($p->getDateHeure(), $p->getPracticienID(), $p->getPatientID(), $p->getType(), $p->getStatut());
         $this->rdvRepository->save($rdv);
+        $this->logger->info('RDV updated: ',['rdv' => $rdv]);
         return $rdv->toDTO();
     }
 

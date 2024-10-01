@@ -12,6 +12,30 @@ use toubeelib\application\actions\CreatePraticienAction;
 
 
 return [
+    'log.rdv.name' => 'toubeelib.log',
+    'log.rdv.file' => __DIR__ . '/log/toubeelib.error.log',
+    'log.rdv.level' => \Monolog\Level::Debug,
+
+    'logger.rdv' => function(ContainerInterface $c) {
+        $logger = new \Monolog\Logger($c->get('log.rdv.name'));
+        $logger->pushHandler(new \Monolog\Handler\StreamHandler(
+                $c->get('log.rdv.file'),
+                $c->get('log.rdv.level'))
+        );
+
+        return $logger;
+    },
+
+    'practicien.pdo' => function(ContainerInterface $c) {
+        $config = parse_ini_file(__DIR__ . '/practicien.ini');
+        $dsn = "{$config['driver']}:host={$config['host']};dbname={$config['dbname']}";
+        $user = $config['username'];
+        $password = $config['password'];
+        $options = array( \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION );
+
+        return new \PDO($dsn, $user, $password, $options);
+    },
+
     RDVRepositoryInterface::class => function(ContainerInterface $c){
         return new \toubeelib\infrastructure\repositories\ArrayRDVRepository();
     },
@@ -21,7 +45,9 @@ return [
     },
 
     ServiceRDVInterface::class => function(ContainerInterface $c){
-        return new \toubeelib\core\services\rdv\ServiceRDV($c->get(RDVRepositoryInterface::class));
+        return new \toubeelib\core\services\rdv\ServiceRDV($c->get(RDVRepositoryInterface::class),
+                                                                $c->get(ServicePraticienInterface::class),
+                                                                $c->get('logger.rdv'));
     },
 
     ServicePraticienInterface::class => function(ContainerInterface $c){
