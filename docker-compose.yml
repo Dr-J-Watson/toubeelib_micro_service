@@ -26,12 +26,14 @@ services:
   toubeelib.db:
     image: 'postgres:latest'
     env_file: ./toubeelibdb.env
+    environment:
+      POSTGRES_PASSWORD: root
     ports:
       - '5432:5432'
     networks:
       - toubeelib.net
     volumes:
-      - ./app/sql:/var/sql'
+      - ./app/sql/init-postgres:/docker-entrypoint-initdb.d
   #
   # service administration des bases sql
   #
