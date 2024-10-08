@@ -6,6 +6,7 @@ use toubeelib\core\repositoryInterfaces\RDVRepositoryInterface;
 use toubeelib\core\repositoryInterfaces\PraticienRepositoryInterface;
 use toubeelib\core\services\praticien\ServicePraticienInterface;
 use toubeelib\application\actions\GetRDVAction;
+use toubeelib\application\actions\CreateRDVAction;
 use toubeelib\application\actions\CancelRDVAction;
 use toubeelib\application\actions\GetPraticienPlanningAction;
 use toubeelib\application\actions\CreatePraticienAction;
@@ -26,22 +27,24 @@ return [
         return $logger;
     },
 
-    'practicien.pdo' => function(ContainerInterface $c) {
-        $config = parse_ini_file(__DIR__ . '/practicien.ini');
-        $dsn = "{$config['driver']}:host={$config['host']};dbname={$config['dbname']}";
-        $user = $config['username'];
-        $password = $config['password'];
-        $options = array( \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION );
+    'rdv.pdo' => function(ContainerInterface $c) {
+        $pdo = new PDO('pgsql:host=toubeelib.db;dbname=rdv', 'root', 'root');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $pdo;
+    },
 
-        return new \PDO($dsn, $user, $password, $options);
+    'praticien.pdo' => function(ContainerInterface $c) {
+        $pdo = new PDO('pgsql:host=toubeelib.db;dbname=praticien', 'root', 'root');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $pdo;
     },
 
     RDVRepositoryInterface::class => function(ContainerInterface $c){
-        return new \toubeelib\infrastructure\repositories\ArrayRdvRepository();
+        return new \toubeelib\infrastructure\repositories\PDORdvRepository($c->get('rdv.pdo'));
     },
 
     PraticienRepositoryInterface::class => function(ContainerInterface $c){
-        return new \toubeelib\infrastructure\repositories\ArrayPraticienRepository();
+        return new \toubeelib\infrastructure\repositories\PDOPraticientRepository($c->get('praticien.pdo'));
     },
 
     ServiceRDVInterface::class => function(ContainerInterface $c){
@@ -55,6 +58,10 @@ return [
 
     GetRDVAction::class => function(ContainerInterface $c){
         return new \toubeelib\application\actions\GetRDVAction($c->get(ServiceRDVInterface::class));
+    },
+
+    CreateRDVAction::class => function(ContainerInterface $c){
+        return new \toubeelib\application\actions\CreateRDVAction($c->get(ServiceRDVInterface::class));
     },
 
     CancelRDVAction::class => function(ContainerInterface $c){

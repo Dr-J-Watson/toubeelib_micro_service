@@ -2,14 +2,14 @@
 
 namespace toubeelib\core\services\rdv;
 
-use Faker\Core\Uuid;
+//use Faker\Core\Uuid;
 use Monolog\Logger;
 use toubeelib\core\domain\entities\rdv\RDV;
 use toubeelib\core\dto\InputRDVDTO;
 use toubeelib\core\dto\RDVDTO;
 use toubeelib\core\repositoryInterfaces\RDVRepositoryInterface;
 use Psr\Log\LoggerInterface;
-
+use Ramsey\Uuid\Uuid;
 class ServiceRDV implements ServiceRDVInterface{
     private RDVRepositoryInterface $rdvRepository;
     private $logger;
@@ -21,7 +21,7 @@ class ServiceRDV implements ServiceRDVInterface{
 
     public function createRDV(InputRDVDTO $p): RDVDTO{
         $rdv = new RDV($p->getPracticienID(),$p->getPatientID(), $p->getType(), $p->getDateHeure());
-        $rdv->setID(uniqid());
+        $rdv->setID(Uuid::uuid4());
         $this->rdvRepository->save($rdv);
         $this->logger->info('RDV created: ',['rdv' => $rdv]);
         return $rdv->toDTO();
