@@ -14,7 +14,7 @@ services:
     ports:
       - '6080:80'
     volumes:
-      - ./app:/var/php
+      - ./app/:/var/php/
     working_dir: /var/php
     networks:
       - toubeelib.net
@@ -31,7 +31,7 @@ services:
     networks:
       - toubeelib.net
     volumes:
-      - ./app/sql/init-postgres:/docker-entrypoint-initdb.d
+      - ./sql/init-postgres:/docker-entrypoint-initdb.d
   #
   # service administration des bases sql
   #
