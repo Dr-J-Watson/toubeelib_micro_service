@@ -26,8 +26,6 @@ interface ServiceRDVInterface
      */
     public function getRDVByPatient(string $idPatient): array;
 
-    // TODO add a method getRDVByPatient
-
     // public function createPraticien(InputPraticienDTO $p): PraticienDTO;
     // public function getPraticienById(string $id): PraticienDTO;
     // public function getSpecialiteById(string $id): SpecialiteDTO;

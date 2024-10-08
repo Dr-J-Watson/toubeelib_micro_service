@@ -61,6 +61,12 @@ class ServiceRDV implements ServiceRDVInterface{
     }
 
     public function getRDVByPatient(string $idPatient): array{
-        return $this->rdvRepository->getRDVByPatientId($idPatient);
+
+        $rdvs =  $this->rdvRepository->getRDVByPatientId($idPatient);
+        $rdvsDTO = [];
+        foreach($rdvs as $rdv){
+            $rdvsDTO[] = $rdv->toDTO();
+        }
+        return $rdvsDTO;
     }
 }

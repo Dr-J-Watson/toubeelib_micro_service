@@ -10,9 +10,10 @@ return function( \Slim\App $app):\Slim\App {
 
     $app->get('/rdvs/{id}[/]', \toubeelib\application\actions\GetRDVAction::class)->setName('getRDV');
 
-    $app->post('/rdv[/]', \toubeelib\application\actions\CreateRDVAction::class)->setName('createRDV');
+    $app->post('/rdvs[/]', \toubeelib\application\actions\CreateRDVAction::class)->setName('createRDV');
 
-    //cancel rdv 
+
+    //cancel rdv
     $app->patch('/rdvs/{id}/cancel[/]', \toubeelib\application\actions\CancelRDVAction::class)->setName('cancelRDV');
 
     // get pratitient disponibility between two dates
@@ -21,6 +22,8 @@ return function( \Slim\App $app):\Slim\App {
 
     $app->get('/praticiens/{id}/planing[/]', \toubeelib\application\actions\GetPraticienPlanningAction::class)->setName('getPraticienDisponibility');
     //$app->get('/praticiens/{id}/planing[/]', \toubeelib\application\actions\GetPraticienPlanningAction::class)->setName('getPraticienDisponibility');
+
+    $app->get('/patients/{patient_id}/rdvs[/]', \toubeelib\application\actions\GetPatientRDVAction::class)->setName('getPatientRDV');
 
     return $app;
 };
