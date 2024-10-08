@@ -4,6 +4,7 @@ namespace toubeelib\infrastructure\repositories;
 use Ramsey\Uuid\Uuid;
 use toubeelib\core\domain\entities\praticien\Praticien;
 use toubeelib\core\domain\entities\praticien\Specialite;
+use toubeelib\core\dto\PraticienDTO;
 use toubeelib\core\repositoryInterfaces\PraticienRepositoryInterface;
 use toubeelib\core\repositoryInterfaces\RepositoryEntityNotFoundException;
 use PDO;
@@ -32,14 +33,31 @@ class PDOPraticientRepository implements PraticienRepositoryInterface
         return $praticien;
     }
 
-    public function save(Praticien $praticien): string
+    public function save(Praticien $praticien): Praticien
     {
-        // TODO: Implement save() method.
-        return 'implement save';
+        $stmt = $this->pdo->prepare('INSERT INTO praticien (id, nom, prenom, adresse, tel, specialite_id) VALUES (:id, :nom, :prenom, :adresse, :tel, :specialite_id)');
+        $stmt->execute([
+            'id' => Uuid::uuid4()->toString(),
+            'nom' => $praticien->nom,
+            'prenom' => $praticien->prenom,
+            'adresse' => $praticien->adresse,
+            'tel' => $praticien->tel,
+            'specialite_id' => $praticien->specialite->ID
+        ]);
+        return $praticien;
     }
 
+    /**
+     * @throws RepositoryEntityNotFoundException
+     */
     public function getSpecialiteById(string $id): Specialite
     {
-        // TODO: Implement getSpecialiteById() method.
+        $stmt = $this->pdo->prepare('SELECT * FROM specialite WHERE id = :id');
+        $stmt->execute(['id' => $id]);
+        $row = $stmt->fetch();
+        if (!$row) {
+            throw new RepositoryEntityNotFoundException("Specialite with id $id not found");
+        }
+        return new Specialite($row['id'], $row['label'], $row['description']);
     }
 }

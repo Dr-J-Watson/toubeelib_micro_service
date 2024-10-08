@@ -9,7 +9,7 @@ interface PraticienRepositoryInterface
 {
 
     public function getSpecialiteById(string $id): Specialite;
-    public function save(Praticien $praticien, string $speciliteId): Praticien;
+    public function save(Praticien $praticien): Praticien;
     public function getPraticienById(string $id): Praticien;
 
 }

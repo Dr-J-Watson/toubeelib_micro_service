@@ -2,6 +2,7 @@
 
 namespace toubeelib\core\services\praticien;
 
+use Ramsey\Uuid\Uuid;
 use Respect\Validation\Exceptions\NestedValidationException;
 use toubeelib\core\domain\entities\praticien\Praticien;
 use toubeelib\core\dto\InputPraticienDTO;
@@ -23,7 +24,9 @@ class ServicePraticien implements ServicePraticienInterface
     {
         try {
             $praticien = new Praticien($p->nom, $p->prenom, $p->adresse, $p->tel);
-            $SavedPraticien = $this->praticienRepository->save($praticien, $p->specialite);
+            $praticien->setID(Uuid::uuid4());
+            $praticien->setSpecialite($this->praticienRepository->getSpecialiteById($p->specialite));
+            $SavedPraticien = $this->praticienRepository->save($praticien);
         } catch(NestedValidationException $e) {
             throw new ServicePraticienInvalidDataException($e->getMessages());
         }

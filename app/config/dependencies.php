@@ -6,6 +6,7 @@ use toubeelib\core\repositoryInterfaces\RDVRepositoryInterface;
 use toubeelib\core\repositoryInterfaces\PraticienRepositoryInterface;
 use toubeelib\core\services\praticien\ServicePraticienInterface;
 use toubeelib\application\actions\GetRDVAction;
+use toubeelib\application\actions\GetPatientRDVAction;
 use toubeelib\application\actions\CreateRDVAction;
 use toubeelib\application\actions\CancelRDVAction;
 use toubeelib\application\actions\GetPraticienPlanningAction;
@@ -58,6 +59,10 @@ return [
 
     GetRDVAction::class => function(ContainerInterface $c){
         return new \toubeelib\application\actions\GetRDVAction($c->get(ServiceRDVInterface::class));
+    },
+
+    GetPatientRDVAction::class => function(ContainerInterface $c){
+        return new \toubeelib\application\actions\GetPatientRDVAction($c->get(ServiceRDVInterface::class));
     },
 
     CreateRDVAction::class => function(ContainerInterface $c){
