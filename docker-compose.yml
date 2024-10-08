@@ -26,8 +26,6 @@ services:
   toubeelib.db:
     image: 'postgres:latest'
     env_file: ./toubeelibdb.env
-    environment:
-      POSTGRES_PASSWORD: root
     ports:
       - '5432:5432'
     networks:
