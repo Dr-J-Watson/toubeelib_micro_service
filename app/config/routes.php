@@ -15,7 +15,7 @@ return function( \Slim\App $app):\Slim\App {
     //cancel rdv
     $app->patch('/rdvs/{id}/cancel[/]', \toubeelib\application\actions\CancelRDVAction::class)->setName('cancelRDV');
 
-    // get pratitient disponibility between two dates
+    $app->get('/praticiens/{id}/disponibility[/]', \toubeelib\application\actions\GetPraticienDisponibilityAction::class)->setName('getPraticienDisponibility');
 
     $app->post('/praticien/create[/]', \toubeelib\application\actions\CreatePraticienAction::class)->setName('createPraticien');
 

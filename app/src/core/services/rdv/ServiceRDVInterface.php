@@ -26,6 +26,8 @@ interface ServiceRDVInterface
      */
     public function getRDVByPatient(string $idPatient): array;
 
+    public function getPraticienDisponibillity(string $idPraticien, string $dateDebut, string $dateFin): array;
+
     // public function createPraticien(InputPraticienDTO $p): PraticienDTO;
     // public function getPraticienById(string $id): PraticienDTO;
     // public function getSpecialiteById(string $id): SpecialiteDTO;

@@ -9,6 +9,7 @@ use toubeelib\application\actions\GetRDVAction;
 use toubeelib\application\actions\GetPatientRDVAction;
 use toubeelib\application\actions\CreateRDVAction;
 use toubeelib\application\actions\CancelRDVAction;
+use toubeelib\application\actions\GetPraticienDisponibilityAction;
 use toubeelib\application\actions\GetPraticienPlanningAction;
 use toubeelib\application\actions\CreatePraticienAction;
 
@@ -71,6 +72,10 @@ return [
 
     CancelRDVAction::class => function(ContainerInterface $c){
         return new \toubeelib\application\actions\CancelRDVAction($c->get(ServiceRDVInterface::class));
+    },
+
+    GetPraticienDisponibilityAction::class => function (ContainerInterface $c) {
+        return new \toubeelib\application\actions\GetPraticienDisponibilityAction($c->get(ServiceRDVInterface::class));
     },
 
     GetPraticienPlanningAction::class => function(ContainerInterface $c){
