@@ -13,4 +13,4 @@ cache.properties
 composer.phar
 composer.lock
 # Logs
-/app/logs/*
+/app/config/logs/*

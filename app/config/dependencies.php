@@ -15,7 +15,7 @@ use toubeelib\application\actions\CreatePraticienAction;
 
 return [
     'log.rdv.name' => 'toubeelib.log',
-    'log.rdv.file' => __DIR__ . '../logs/toubeelib.rdv.log',
+    'log.rdv.file' => __DIR__ . '/logs/toubeelib.rdv.log',
     'log.rdv.level' => \Monolog\Level::Debug,
 
     'logger.rdv' => function(ContainerInterface $c) {

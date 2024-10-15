@@ -32,7 +32,7 @@ class PDORdvRepository implements RDVRepositoryInterface
                 'id' => $rdv->getId(),
                 'praticien_id' => $rdv->getPraticienId(),
                 'patient_id' => $rdv->patientID,
-                'type' => $rdv->type,
+                'type_id' => $rdv->type,
                 'date_heure' => $rdv->dateHeure->format('Y-m-d H:i'),
                 'statut' => $rdv->statut,
             ]);
@@ -42,12 +42,12 @@ class PDORdvRepository implements RDVRepositoryInterface
 
     public function update(RDV $rdv): RDV
     {
-        $stmt = $this->pdo->prepare('UPDATE rdv SET praticien_id = :praticien_id, patient_id = :patient_id, type = :type, date_heure = :date_heure, statut = :statut WHERE id = :id');
+        $stmt = $this->pdo->prepare('UPDATE rdv SET praticien_id = :praticien_id, patient_id = :patient_id, type_id = :type_id, date_heure = :date_heure, statut = :statut WHERE id = :id');
         $stmt->execute([
             'id' => $rdv->getId(),
             'praticien_id' => $rdv->getPraticienId(),
             'patient_id' => $rdv->patientID,
-            'type' => $rdv->type,
+            'type_id' => $rdv->type,
             'date_heure' => $rdv->dateHeure->format('Y-m-d H:i'),
             'statut' => $rdv->statut,
         ]);
@@ -63,7 +63,7 @@ class PDORdvRepository implements RDVRepositoryInterface
         if (!$row) {
             throw new \toubeelib\core\repositoryInterfaces\RepositoryEntityNotFoundException("RDV with id $id not found");
         }
-        $rdv = new RDV($row['praticien_id'], $row['patient_id'], $row['type'], new \DateTimeImmutable($row['date_heure']));
+        $rdv = new RDV($row['praticien_id'], $row['patient_id'], $row['type_id'], new \DateTimeImmutable($row['date_heure']));
         $rdv->setID($row['id']);
         return $rdv;
     }
