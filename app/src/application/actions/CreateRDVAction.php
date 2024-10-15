@@ -25,7 +25,7 @@ class CreateRDVAction extends AbstractAction
     public function __invoke(Request $rq, Response $rs, $args): Response
     {
         $body = $rq->getParsedBody();
-        $dateTime = isset($body['date_time']) ? \DateTimeImmutable::createFromFormat('Y-m-d H:i', $body['date_time']) : throw new Exception("date_ime not found", 400);
+        $dateTime = isset($body['date_time']) ? \DateTimeImmutable::createFromFormat('Y-m-d H:i', $body['date_time']) : throw new Exception("date_time not found", 400);
         $praticienId = $body['praticien_id'] ?? throw new \Exception("praticien_id not found", 400);
         $patientId = $body['patient_id'] ?? throw new Exception("patient_id not found", 400);
         $type = $body['type'] ?? throw new Exception("type not found", 400);

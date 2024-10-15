@@ -17,7 +17,32 @@ class PDORdvRepository implements RDVRepositoryInterface
 
     public function save(RDV $rdv): RDV
     {
-        $stmt = $this->pdo->prepare('INSERT INTO rdv (id, praticien_id, patient_id, type, date_heure, statut) VALUES (:id, :praticien_id, :patient_id, :type, :date_heure, :statut)');
+        
+        $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM rdv WHERE id = :id');
+        $stmt->execute(['id' => $rdv->getId()]);
+        $exists = $stmt->fetchColumn();
+    
+        if ($exists) {
+            
+            return $this->update($rdv);
+        } else {
+            
+            $stmt = $this->pdo->prepare('INSERT INTO rdv (id, praticien_id, patient_id, type, date_heure, statut) VALUES (:id, :praticien_id, :patient_id, :type, :date_heure, :statut)');
+            $stmt->execute([
+                'id' => $rdv->getId(),
+                'praticien_id' => $rdv->getPraticienId(),
+                'patient_id' => $rdv->patientID,
+                'type' => $rdv->type,
+                'date_heure' => $rdv->dateHeure->format('Y-m-d H:i'),
+                'statut' => $rdv->statut,
+            ]);
+            return $rdv;
+        }
+    }
+
+    public function update(RDV $rdv): RDV
+    {
+        $stmt = $this->pdo->prepare('UPDATE rdv SET praticien_id = :praticien_id, patient_id = :patient_id, type = :type, date_heure = :date_heure, statut = :statut WHERE id = :id');
         $stmt->execute([
             'id' => $rdv->getId(),
             'praticien_id' => $rdv->getPraticienId(),
@@ -28,20 +53,7 @@ class PDORdvRepository implements RDVRepositoryInterface
         ]);
         return $rdv;
     }
-
-    public function update(RDV $rdv): RDV
-    {
-        $stmt = $this->pdo->prepare('UPDATE rdv SET practicien_id = :practicien_id, patient_id = :patient_id, type = :type, date_heure = :date_heure, statut = :statut WHERE id = :id');
-        $stmt->execute([
-            'id' => $rdv->getId(),
-            'practicien_id' => $rdv->getPraticienId(),
-            'patient_id' => $rdv->patient_id,
-            'type' => $rdv->type,
-            'date_heure' => $rdv->date_heure->format('Y-m-d H:i'),
-            'statut' => $rdv->statut,
-        ]);
-        return $rdv;
-    }
+    
 
     public function getRDVById(string $id): RDV
     {

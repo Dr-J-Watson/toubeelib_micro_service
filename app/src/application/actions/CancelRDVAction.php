@@ -33,7 +33,7 @@ class CancelRDVAction extends AbstractAction{
             return JsonRenderer::render($rs, 200, $responseContent);
 
         }catch(\Exception $e){
-            throw new \Exception("RDV not found", 404);
+            throw new \Exception($e);
         }
     }
 

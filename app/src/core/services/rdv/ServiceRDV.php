@@ -69,4 +69,22 @@ class ServiceRDV implements ServiceRDVInterface{
         }
         return $rdvsDTO;
     }
+
+    public function updateRDVCycle(string $idRDV, string $cycle): RDVDTO{
+        if($cycle == 1){
+            $cycle = 'HONORE';
+        }elseif($cycle == 2){
+            $cycle = 'NON_HONORE';
+        }elseif($cycle == 3){
+            $cycle = 'PAYE';
+        }else{
+            throw new \Exception("cycle must be 1 for 'honore', 2 for 'non honore' or 3 for 'paye'", 400);
+        }
+
+        $rdv = $this->rdvRepository->getRDVById($idRDV);
+        $rdv->setStatut($cycle);
+        $updatedRdv = $this->rdvRepository->save($rdv);
+        $this->logger->info('RDV cycle updated: ', ['IdRdv' => $updatedRdv->__get('ID')]);
+        return $updatedRdv->toDTO();
+    }
 }
