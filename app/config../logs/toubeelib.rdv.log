@@ -1,0 +1,5 @@
+[2024-10-15T15:26:29.336759+00:00] toubeelib.log.INFO: RDV cancelled:  {"IdRdv":"089bae36-3a7c-4eec-bfa7-425d7d92b27d"} []
+[2024-10-15T15:37:25.724274+00:00] toubeelib.log.INFO: RDV created:  {"rdv":{"toubeelib\\core\\domain\\entities\\rdv\\RDV":[]}} []
+[2024-10-15T15:37:52.859132+00:00] toubeelib.log.INFO: RDV created:  {"rdv":{"toubeelib\\core\\domain\\entities\\rdv\\RDV":[]}} []
+[2024-10-15T15:38:09.851962+00:00] toubeelib.log.INFO: RDV created:  {"rdv":{"toubeelib\\core\\domain\\entities\\rdv\\RDV":[]}} []
+[2024-10-15T15:40:15.654777+00:00] toubeelib.log.INFO: RDV created:  {"rdv":{"toubeelib\\core\\domain\\entities\\rdv\\RDV":[]}} []
