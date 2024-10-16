@@ -87,12 +87,12 @@ class PDORdvRepository implements RDVRepositoryInterface
 
     public function getRDVByPraticienId(string $id, ?string $dateDebut, ?string $dateFin): array
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM rdv WHERE praticien_id = :id AND date_debut >= :date_debut AND date_fin <= :date_fin');
+        $stmt = $this->pdo->prepare('SELECT * FROM rdv WHERE praticien_id = :id AND date_heure >= :date_debut AND date_heure <= :date_fin');
         $stmt->execute(['id' => $id, 'date_debut' => $dateDebut, 'date_fin' => $dateFin]);
         $rows = $stmt->fetchAll();
         $rdvs = [];
         foreach ($rows as $row) {
-            $rdv = new RDV($row['date_debut'], $row['date_fin'], $row['patient_id'], $row['praticien_id']);
+            $rdv = new RDV($row['praticien_id'], $row['patient_id'], $row['type'], new \DateTimeImmutable($row['date_heure']));
             $rdv->setID($row['id']);
             $rdvs[] = $rdv;
         }

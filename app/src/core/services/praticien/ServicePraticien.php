@@ -52,4 +52,20 @@ class ServicePraticien implements ServicePraticienInterface
             throw new ServicePraticienInvalidDataException('invalid Specialite ID');
         }
     }
+
+    public function getPraticiens(string $nom, string $ville, string $specialite, int $page ): array
+    {
+        $praticiens = $this->praticienRepository->getPraticiens($nom, $ville, $specialite, $page);
+        $praticiensDTO = [];
+        foreach($praticiens as $praticien) {
+            $praticiensDTO[] = $praticien->toDTO();
+        }
+        return $praticiensDTO;
+    }
+
+    public function getPraticien(string $id): PraticienDTO
+    {
+        $praticien = $this->praticienRepository->getPraticienById($id);
+        return $praticien->toDTO();
+    }
 }

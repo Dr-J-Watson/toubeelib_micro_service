@@ -4,6 +4,7 @@ namespace toubeelib\application\actions;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Routing\RouteContext;
 use toubeelib\application\renderer\JsonRenderer;
 use toubeelib\core\services\rdv\ServiceRDVInterface;
 use toubeelib\core\repositoryInterfaces\RDVRepositoryInterface;
@@ -23,9 +24,15 @@ class GetRDVAction extends AbstractAction{
         try{
             $rdv = $this->serviceRDV->getRDVById($args['id']);
 
+            $routeContext = RouteContext::fromRequest($rq);
+            $routeParser = $routeContext->getRouteParser();
+
             $responseContent = [
-                'type' => 'rdv',
-                'data' => $rdv
+                'type' => 'ressources',
+                'rdv' => $rdv,
+                'links' => [
+                    'praticien' => $routeParser->urlFor('getPraticien', ['id' => $rdv->practicienID])
+                ]
             ];
 
             return JsonRenderer::render($rs, 200, $responseContent);

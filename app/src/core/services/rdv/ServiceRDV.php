@@ -18,10 +18,18 @@ use DatePeriod;
 class ServiceRDV implements ServiceRDVInterface{
     private RDVRepositoryInterface $rdvRepository;
     private $logger;
+    private $contraintePratitien;
 
     public function __construct(RDVRepositoryInterface $rdvRepository, Logger $logger){
         $this->rdvRepository = $rdvRepository;
         $this->logger = $logger;
+        $this->contraintePratitien = [
+            'heureDebutMatin' => new DateTime('08:00'),
+            'heureFinMatin' => new DateTime('12:00'),
+            'heureDebutApresMidi' => new DateTime('13:00'),
+            'heureFinApresMidi' => new DateTime('17:00'),
+            'dureeRdv' => new DateInterval('PT30M'),
+        ];
     }
 
     public function createRDV(InputRDVDTO $p): RDVDTO{
@@ -73,5 +81,46 @@ class ServiceRDV implements ServiceRDVInterface{
             $rdvsDTO[] = $rdv->toDTO();
         }
         return $rdvsDTO;
+    }
+
+    public function getPraticienDisponibillity(string $idPraticien, string $dateDebut, string $dateFin): array
+    {
+        $praticienRdvs = $this->rdvRepository->getRDVByPraticienId($idPraticien, $dateDebut, $dateFin);
+        $heureDebutMatin = $this->contraintePratitien['heureDebutMatin'];
+        $heureFinMatin = $this->contraintePratitien['heureFinMatin'];
+        $heureDebutApresMidi = $this->contraintePratitien['heureDebutApresMidi'];
+        $heureFinApresMidi = $this->contraintePratitien['heureFinApresMidi'];
+        $dureeRdv = $this->contraintePratitien['dureeRdv'];
+
+        $creneauxPris = [];
+        foreach ($praticienRdvs as $rdv) {
+            $creneauxPris[] = $rdv->dateHeure->format('Y-m-d H:i');
+        }
+
+        $disponibilites = [];
+        $periode = new DatePeriod(new DateTime($dateDebut), new DateInterval('P1D'), new DateTime($dateFin));
+        foreach ($periode as $jour) {
+            if ($jour->format('N') < 6) { // Exclure samedi et dimanche
+                $date = $jour->format('Y-m-d');
+                $disponibilites[$date] = [];
+                $heure = clone $heureDebutMatin;
+                while ($heure < $heureFinMatin) {
+                    $creneau = $date . ' ' . $heure->format('H:i');
+                    if (!in_array($creneau, $creneauxPris)) {
+                        $disponibilites[$date][] = $creneau;
+                    }
+                    $heure->add($dureeRdv);
+                }
+                $heure = clone $heureDebutApresMidi;
+                while ($heure < $heureFinApresMidi) {
+                    $creneau = $date . ' ' . $heure->format('H:i');
+                    if (!in_array($creneau, $creneauxPris)) {
+                        $disponibilites[$date][] = $creneau;
+                    }
+                    $heure->add($dureeRdv);
+                }
+            }
+        }
+        return $disponibilites;
     }
 }

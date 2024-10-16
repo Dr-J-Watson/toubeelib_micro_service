@@ -9,7 +9,7 @@ use toubeelib\core\repositoryInterfaces\PraticienRepositoryInterface;
 use toubeelib\core\repositoryInterfaces\RepositoryEntityNotFoundException;
 use PDO;
 
-class PDOPraticientRepository implements PraticienRepositoryInterface
+class PDOPraticienRepository implements PraticienRepositoryInterface
 {
     private PDO $pdo;
 
@@ -26,7 +26,7 @@ class PDOPraticientRepository implements PraticienRepositoryInterface
         if (!$row) {
             throw new RepositoryEntityNotFoundException("Praticien with id $id not found");
         }
-        $praticien = new Praticien($row['nom'], $row['prenom'], $row['adresse'], $row['telephone']);
+        $praticien = new Praticien($row['nom'], $row['prenom'], $row['adresse'], $row['tel']);
         $praticien->setID($row['id']);
         $specialite = $this->getSpecialiteById($row['specialite_id']);
         $praticien->setSpecialite($specialite);
@@ -59,5 +59,29 @@ class PDOPraticientRepository implements PraticienRepositoryInterface
             throw new RepositoryEntityNotFoundException("Specialite with id $id not found");
         }
         return new Specialite($row['id'], $row['label'], $row['description']);
+    }
+
+    public function getPraticiens(string $nom, string $ville, string $specialite, int $page=1): array
+    {
+        $limit = 5;
+        $offset = ($page - 1) * $limit;
+
+        $stmt = $this->pdo->prepare('SELECT * FROM praticien WHERE LOWER(nom) LIKE LOWER(:nom) AND LOWER(adresse) LIKE LOWER(:ville) AND specialite_id LIKE :specialite');
+        $stmt->execute([
+            'nom' => '%' . strtolower($nom) . '%',
+            'ville' => '%' . strtolower($ville) . '%',
+            'specialite' => '%' . strtolower($specialite) . '%'
+        ]);
+        $rows = $stmt->fetchAll();
+        $praticiens = [];
+        foreach ($rows as $row) {
+            $praticien = new Praticien($row['nom'], $row['prenom'], $row['adresse'], $row['tel']);
+            $praticien->setID($row['id']);
+            $specialite = $this->getSpecialiteById($row['specialite_id']);
+            $praticien->setSpecialite($specialite);
+            $praticiens[] = $praticien;
+        }
+        return $praticiens;
+
     }
 }

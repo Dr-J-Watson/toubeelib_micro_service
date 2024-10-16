@@ -20,6 +20,10 @@ class GetPatientRDVAction extends AbstractAction
     {
         $patientId = $args['patient_id'];
         $rdvs = $this->serviceRDV->getRDVByPatient($patientId);
+        $data = [
+            'type' => 'collection',
+            'rdvs' => $rdvs
+        ];
         return JsonRenderer::render($rs, 200, $rdvs);
     }
 

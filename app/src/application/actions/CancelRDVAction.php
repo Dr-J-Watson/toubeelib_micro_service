@@ -27,7 +27,12 @@ class CancelRDVAction extends AbstractAction{
     
             $responseContent = [
                 'type' => 'rdv',
-                'data' => $rdv
+                'rdv' => $rdv,
+                'links' => [
+                    'self' => '/rdvs/'.$rdv->ID,
+//                    TODO: add links to related praticien via a new route
+//                    'praticien' => '/praticien/'.$rdv->praticienId,
+                ]
             ];
 
             return JsonRenderer::render($rs, 200, $responseContent);

@@ -10,6 +10,8 @@ use toubeelib\application\actions\GetPatientRDVAction;
 use toubeelib\application\actions\CreateRDVAction;
 use toubeelib\application\actions\CancelRDVAction;
 use toubeelib\application\actions\GetPraticienDisponibilityAction;
+use toubeelib\application\actions\GetPraticienAction;
+use toubeelib\application\actions\GetPraticiensAction;
 use toubeelib\application\actions\GetPraticienPlanningAction;
 use toubeelib\application\actions\CreatePraticienAction;
 
@@ -46,7 +48,7 @@ return [
     },
 
     PraticienRepositoryInterface::class => function(ContainerInterface $c){
-        return new \toubeelib\infrastructure\repositories\PDOPraticientRepository($c->get('praticien.pdo'));
+        return new \toubeelib\infrastructure\repositories\PDOPraticienRepository($c->get('praticien.pdo'));
     },
 
     ServiceRDVInterface::class => function(ContainerInterface $c){
@@ -72,6 +74,14 @@ return [
 
     CancelRDVAction::class => function(ContainerInterface $c){
         return new \toubeelib\application\actions\CancelRDVAction($c->get(ServiceRDVInterface::class));
+    },
+
+    GetPraticienAction::class => function(ContainerInterface $c){
+        return new \toubeelib\application\actions\GetPraticienAction($c->get(ServicePraticienInterface::class));
+    },
+
+    GetPraticiensAction::class=> function(ContainerInterface $c){
+        return new \toubeelib\application\actions\GetPraticiensAction($c->get(ServicePraticienInterface::class));
     },
 
     GetPraticienDisponibilityAction::class => function (ContainerInterface $c) {

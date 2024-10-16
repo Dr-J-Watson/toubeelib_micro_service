@@ -4,6 +4,7 @@ namespace toubeelib\application\actions;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Routing\RouteContext;
 use toubeelib\application\renderer\JsonRenderer;
 use toubeelib\core\dto\InputRDVDTO;
 use toubeelib\core\services\rdv\ServiceRDVInterface;
@@ -37,7 +38,19 @@ class CreateRDVAction extends AbstractAction
         $rdvInputDto = new InputRDVDTO($dateTime, $praticienId, $patientId, $type, $status);
 
         $rdv = $this->serviceRDV->createRDV($rdvInputDto);
+
+        $routeContext = RouteContext::fromRequest($rq);
+        $routeParser = $routeContext->getRouteParser();
+
+        $data = [
+            'type' => 'ressources',
+            'rdv' => $rdv,
+            'links' => [
+                'self' => $routeParser->urlFor('createRDV') . $rdv->ID,
+                'praticien' => $routeParser->urlFor('getPraticien', ['id' => $rdv->practicienID])
+            ]
+        ];
         $rs = $rs->withHeader('Location', '/rdvs/' . $rdv->ID);
-        return JsonRenderer::render($rs, 201, $rdv);
+        return JsonRenderer::render($rs, 201, $data);
     }
 }

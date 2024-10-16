@@ -13,5 +13,11 @@ interface ServicePraticienInterface
     public function getPraticienById(string $id): PraticienDTO;
     public function getSpecialiteById(string $id): SpecialiteDTO;
 
+    /**
+     * @return PraticienDTO[]
+     */
+    public function getPraticiens(string $nom, string $ville, string $specialite, int $page): array;
+
+    public function getPraticien(string $id): PraticienDTO;
 
 }

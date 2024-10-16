@@ -6,6 +6,7 @@ namespace toubeelib\application\actions;
 use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Routing\RouteContext;
 use toubeelib\application\renderer\JsonRenderer;
 use toubeelib\core\dto\InputPraticienDTO;
 use toubeelib\core\services\praticien\ServicePraticien;
@@ -27,7 +28,6 @@ class CreatePraticienAction extends AbstractAction
      */
     public function __invoke(Request $rq, Response $rs, $args): Response
     {
-        //get the body of the request
         $body = $rq->getParsedBody();
         $nom = $body['nom'] ?? throw new Exception("nom not found", 400);
         $prenom = $body['prenom'] ?? throw new Exception("prenom not found", 400);
@@ -49,9 +49,25 @@ class CreatePraticienAction extends AbstractAction
         //    throw new Exception("Invalid phone number", 400);
         //}
 
-            $inputPratitienDto = new InputPraticienDTO($nom, $prenom, $adresse, $tel, $specialiteId);
-            $praticien = $this->servicePraticien->createPraticien($inputPratitienDto);
-            return JsonRenderer::render($rs, 200, $praticien);
+        $inputPratitienDto = new InputPraticienDTO($nom, $prenom, $adresse, $tel, $specialiteId);
+        $praticien = $this->servicePraticien->createPraticien($inputPratitienDto);
+
+        $routeContext = RouteContext::fromRequest($rq);
+        $routeParser = $routeContext->getRouteParser();
+
+            $data = [
+                'type' => 'ressources',
+                'praticien' => $praticien,
+                'links' => [
+                    'self' => $routeParser->urlFor('getPraticien', ['id' => $praticien->ID]),
+                    'planning' => $routeParser->urlFor('getPraticienPlanning', ['id' => $praticien->ID]),
+                    'dispobilite' => $routeParser->urlFor('getPraticienDisponibility', ['id' => $praticien->ID])
+                ]
+            ];
+
+            $rs = $rs->withHeader('Location', $routeParser->urlFor('getPraticien', ['id' => $praticien->ID]));
+
+            return JsonRenderer::render($rs, 201, $data);
 
     }
 }
