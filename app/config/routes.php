@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use toubeelib\application\actions\AuthAction;
 use toubeelib\application\actions\CancelRDVAction;
 use toubeelib\application\actions\CreatePraticienAction;
@@ -12,7 +14,17 @@ use toubeelib\application\actions\HomeAction;
 use toubeelib\application\actions\UpdateRDVCycleAction;
 use toubeelib\application\middlewares\JWTAuthMiddleware;
 
-return function( \Slim\App $app):\Slim\App {
+return function( \Slim\App $app): \Slim\App {
+
+    // Ajout du middleware CORS
+    $app->add(toubeelib\application\middlewares\Cors::class);
+
+    // Options route pour CORS
+    $app->options('/{routes:.+}', function (Request $rq, Response $rs, array $args) : Response {
+        return $rs;
+    });
+
+    // Routes
 
     $app->get('/', HomeAction::class)->setName('home');
 
@@ -21,29 +33,38 @@ return function( \Slim\App $app):\Slim\App {
 
     $app->post('/rdvs/create[/]', CreateRDVAction::class)->setName('createRDV');
 
-    //cancel rdv
+    // Annuler un rendez-vous
     $app->patch('/rdvs/{id}/cancel[/]', CancelRDVAction::class)->setName('cancelRDV');
 
-    // get pratitient disponibility between two dates
+    // Créer un praticien
+    $app->post('/praticiens[/]', CreatePraticienAction::class)->setName('createPraticien');
 
-    $app->post('/praticien/create[/]', CreatePraticienAction::class)->setName('createPraticien');
+    // Obtenir tous les praticiens
+    $app->get('/praticiens[/]', \toubeelib\application\actions\GetPraticiensAction::class)->setName('getPraticiens');
 
-    $app->get('/praticiens/{id}/planing[/]', GetPraticienPlanningAction::class)->setName('getPraticienDisponibility')
+    // Obtenir les détails d'un praticien
+    $app->get('/praticiens/{id}[/]', \toubeelib\application\actions\GetPraticienAction::class)->setName('getPraticien');
+
+    // Obtenir la disponibilité d'un praticien
+    $app->get('/praticiens/{id}/disponibility[/]', \toubeelib\application\actions\GetPraticienDisponibilityAction::class)->setName('getPraticienDisponibility');
+
+    // Obtenir le planning d'un praticien
+    $app->get('/praticiens/{id}/planing[/]', GetPraticienPlanningAction::class)->setName('getPraticienPlanning')
         ->add(new JWTAuthMiddleware());
 
+    // Obtenir les rendez-vous d'un patient
     $app->get('/patients/{patient_id}/rdvs[/]', GetPatientRDVAction::class)->setName('getPatientRDV')
         ->add(new JWTAuthMiddleware());
 
-    //gérer le cycle de vie des rendez-vous (honoré, non honoré, payé)
+    // Gérer le cycle de vie des rendez-vous (honoré, non honoré, payé)
     $app->patch('/rdvs/{id}/cycle[/]', UpdateRDVCycleAction::class)->setName('updateRDVCycle');
 
-    //Auth
+    // Authentification
     $app->post('/users/signin[/]', AuthAction::class)->setName('signin');
 
-    //Refresh token
+    // Rafraîchir le token JWT
     $app->post('/refresh', AuthAction::class)->setName('refresh')
         ->add(new JWTAuthMiddleware());
-
 
     return $app;
 };
