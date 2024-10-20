@@ -23,18 +23,17 @@ class PDORdvRepository implements RDVRepositoryInterface
         $exists = $stmt->fetchColumn();
     
         if ($exists) {
-            
             return $this->update($rdv);
         } else {
             
-            $stmt = $this->pdo->prepare('INSERT INTO rdv (id, praticien_id, patient_id, type, date_heure, statut) VALUES (:id, :praticien_id, :patient_id, :type, :date_heure, :statut)');
+            $stmt = $this->pdo->prepare('INSERT INTO rdv (id, praticien_id, patient_id, type_id, date_heure, statut) VALUES (:id, :praticien_id, :patient_id, :type_id, :date_heure, :statut)');
             $stmt->execute([
                 'id' => $rdv->getId(),
-                'praticien_id' => $rdv->getPraticienId(),
-                'patient_id' => $rdv->patientID,
-                'type_id' => $rdv->type,
-                'date_heure' => $rdv->dateHeure->format('Y-m-d H:i'),
-                'statut' => $rdv->statut,
+                'praticien_id' => trim($rdv->getPraticienId()),
+                'patient_id' => trim($rdv->patientID),
+                'type_id' => trim($rdv->type),
+                'date_heure' => trim($rdv->dateHeure->format('Y-m-d H:i')),
+                'statut' => trim($rdv->statut),
             ]);
             return $rdv;
         }

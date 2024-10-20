@@ -23,7 +23,6 @@ class JWTAuthMiddleware{
 
             $auth = new AuthDTO($token->id, $token->email, $token->role);
 
-
         } catch (ExpiredException $e) {
             throw new \Exception("Token expired", 401);
         } catch (SignatureInvalidException $e) {

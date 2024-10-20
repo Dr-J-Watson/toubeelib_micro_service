@@ -31,7 +31,8 @@ return function( \Slim\App $app): \Slim\App {
     $app->get('/rdvs/{id}[/]', GetRDVAction::class)->setName('getRDV')
         ->add(new JWTAuthMiddleware());
 
-    $app->post('/rdvs/create[/]', CreateRDVAction::class)->setName('createRDV');
+    // Prendre un rendez vous
+    $app->post('/rdvs[/]', CreateRDVAction::class)->setName('createRDV');
 
     // Annuler un rendez-vous
     $app->patch('/rdvs/{id}/cancel[/]', CancelRDVAction::class)->setName('cancelRDV');
