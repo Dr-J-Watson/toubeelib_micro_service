@@ -91,7 +91,7 @@ class PDORdvRepository implements RDVRepositoryInterface
         $rows = $stmt->fetchAll();
         $rdvs = [];
         foreach ($rows as $row) {
-            $rdv = new RDV($row['praticien_id'], $row['patient_id'], $row['type'], new \DateTimeImmutable($row['date_heure']));
+            $rdv = new RDV($row['praticien_id'], $row['patient_id'], $row['type_id'], new \DateTimeImmutable($row['date_heure']));
             $rdv->setID($row['id']);
             $rdvs[] = $rdv;
         }

@@ -61,27 +61,29 @@ class PDOPraticienRepository implements PraticienRepositoryInterface
         return new Specialite($row['id'], $row['label'], $row['description']);
     }
 
-    public function getPraticiens(string $nom, string $ville, string $specialite, int $page=1): array
+    public function getPraticiens(string $nom, string $ville, string $specialite, int $page = 1): array
     {
         $limit = 5;
         $offset = ($page - 1) * $limit;
-
-        $stmt = $this->pdo->prepare('SELECT * FROM praticien WHERE LOWER(nom) LIKE LOWER(:nom) AND LOWER(adresse) LIKE LOWER(:ville) AND specialite_id LIKE :specialite');
-        $stmt->execute([
+    
+        $query = 'SELECT * FROM praticien WHERE LOWER(nom) LIKE LOWER(:nom) AND LOWER(adresse) LIKE LOWER(:ville)';
+        $params = [
             'nom' => '%' . strtolower($nom) . '%',
-            'ville' => '%' . strtolower($ville) . '%',
-            'specialite' => '%' . strtolower($specialite) . '%'
-        ]);
+            'ville' => '%' . strtolower($ville) . '%'
+        ];
+    
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute($params);
         $rows = $stmt->fetchAll();
+    
         $praticiens = [];
         foreach ($rows as $row) {
             $praticien = new Praticien($row['nom'], $row['prenom'], $row['adresse'], $row['tel']);
             $praticien->setID($row['id']);
-            $specialite = $this->getSpecialiteById($row['specialite_id']);
-            $praticien->setSpecialite($specialite);
+            $specialiteEntity = $this->getSpecialiteById($row['specialite_id']);
+            $praticien->setSpecialite($specialiteEntity);
             $praticiens[] = $praticien;
         }
         return $praticiens;
-
     }
 }

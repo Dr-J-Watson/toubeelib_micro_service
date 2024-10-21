@@ -83,44 +83,49 @@ class ServiceRDV implements ServiceRDVInterface{
         return $rdvsDTO;
     }
 
-    public function getPraticienDisponibillity(string $idPraticien, string $dateDebut, string $dateFin): array
+    public function getPraticienDisponibillity(string $idPraticien, ?string $dateDebut, ?string $dateFin): array
     {
-        $praticienRdvs = $this->rdvRepository->getRDVByPraticienId($idPraticien, $dateDebut, $dateFin);
-        $heureDebutMatin = $this->contraintePratitien['heureDebutMatin'];
-        $heureFinMatin = $this->contraintePratitien['heureFinMatin'];
-        $heureDebutApresMidi = $this->contraintePratitien['heureDebutApresMidi'];
-        $heureFinApresMidi = $this->contraintePratitien['heureFinApresMidi'];
-        $dureeRdv = $this->contraintePratitien['dureeRdv'];
-
-        $creneauxPris = [];
-        foreach ($praticienRdvs as $rdv) {
-            $creneauxPris[] = $rdv->dateHeure->format('Y-m-d H:i');
-        }
-
+        // Gestion des dates par défaut si null
+        $dateDebut = $dateDebut ? new DateTime($dateDebut) : new DateTime();
+        $dateFin = $dateFin ? new DateTime($dateFin) : (new DateTime())->add(new DateInterval('P1M'));
+    
+        // Récupérer les rendez-vous existants du praticien
+        $praticienRdvs = $this->rdvRepository->getRDVByPraticienId($idPraticien, $dateDebut->format('Y-m-d'), $dateFin->format('Y-m-d'));
+    
+        // Créer une liste des créneaux déjà pris
+        $creneauxPris = array_map(fn($rdv) => $rdv->dateHeure->format('Y-m-d H:i'), $praticienRdvs);
+    
         $disponibilites = [];
-        $periode = new DatePeriod(new DateTime($dateDebut), new DateInterval('P1D'), new DateTime($dateFin));
+        $periode = new DatePeriod($dateDebut, new DateInterval('P1D'), $dateFin);
+    
         foreach ($periode as $jour) {
-            if ($jour->format('N') < 6) { // Exclure samedi et dimanche
-                $date = $jour->format('Y-m-d');
-                $disponibilites[$date] = [];
-                $heure = clone $heureDebutMatin;
-                while ($heure < $heureFinMatin) {
-                    $creneau = $date . ' ' . $heure->format('H:i');
-                    if (!in_array($creneau, $creneauxPris)) {
-                        $disponibilites[$date][] = $creneau;
-                    }
-                    $heure->add($dureeRdv);
-                }
-                $heure = clone $heureDebutApresMidi;
-                while ($heure < $heureFinApresMidi) {
-                    $creneau = $date . ' ' . $heure->format('H:i');
-                    if (!in_array($creneau, $creneauxPris)) {
-                        $disponibilites[$date][] = $creneau;
-                    }
-                    $heure->add($dureeRdv);
-                }
+            // Exclure les week-ends (samedi et dimanche)
+            if ($jour->format('N') < 6) {
+                $disponibilites[$jour->format('Y-m-d')] = array_merge(
+                    $this->genererCreneauxDisponibles($jour, $this->contraintePratitien['heureDebutMatin'], $this->contraintePratitien['heureFinMatin'], $creneauxPris),
+                    $this->genererCreneauxDisponibles($jour, $this->contraintePratitien['heureDebutApresMidi'], $this->contraintePratitien['heureFinApresMidi'], $creneauxPris)
+                );
             }
         }
+    
         return $disponibilites;
     }
+    
+    private function genererCreneauxDisponibles(DateTime $jour, DateTime $heureDebut, DateTime $heureFin, array $creneauxPris): array
+    {
+        $dureeRdv = $this->contraintePratitien['dureeRdv'];
+        $disponibilites = [];
+        $heure = clone $heureDebut;
+    
+        while ($heure < $heureFin) {
+            $creneau = $jour->format('Y-m-d') . ' ' . $heure->format('H:i');
+            if (!in_array($creneau, $creneauxPris)) {
+                $disponibilites[] = $creneau;
+            }
+            $heure->add($dureeRdv);
+        }
+    
+        return $disponibilites;
+    }
+    
 }

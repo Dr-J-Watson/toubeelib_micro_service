@@ -10,7 +10,7 @@ use Slim\Psr7\Factory\ResponseFactory;
 class Cors
 {
     public function __invoke(Request $rq, RequestHandler $next): Response {
-        if (!$rq->hasHeader('Origin')) {
+        if (! $rq->hasHeader('Origin')) {
             $responseFactory = new ResponseFactory();
             $response = $responseFactory->createResponse(401);
             $response->getBody()->write(json_encode(['error' => 'missing Origin Header (cors)']));

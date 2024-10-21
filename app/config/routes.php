@@ -13,6 +13,7 @@ use toubeelib\application\actions\GetRDVAction;
 use toubeelib\application\actions\HomeAction;
 use toubeelib\application\actions\UpdateRDVCycleAction;
 use toubeelib\application\middlewares\JWTAuthMiddleware;
+use toubeelib\application\middlewares\Cors;
 
 return function( \Slim\App $app): \Slim\App {
 
