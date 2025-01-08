@@ -3,9 +3,9 @@
 .vscode/
 .DS_STORE
 # Vendor
-/app/vendor
+vendor
 # Cache
-/var/cache/*
+cache/*
 .phpunit.result.cache
 cache.properties
 .php_cs.cache
@@ -13,4 +13,4 @@ cache.properties
 composer.phar
 composer.lock
 # Logs
-/app/config/logs/*
+logs/*
