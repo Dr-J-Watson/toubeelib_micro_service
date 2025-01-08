@@ -39,16 +39,16 @@ services:
 
   # ===================GATEAWAY================
 
-    gateaway:
-      build:
-        context: build
-        dockerfile: 8.3-cli.Dockerfile
-      ports:
-        - '6081:80'
-      volumes:
-        - ./gateaway/app/:/var/php/
-      working_dir: /var/php
-      command: php -S 0.0.0.0:80 -t /var/php/public
+  gateaway:
+    build:
+      context: build
+      dockerfile: 8.3-cli.Dockerfile
+    ports:
+      - '6081:80'
+    volumes:
+      - ./gateaway/app/:/var/php/
+    working_dir: /var/php
+    command: php -S 0.0.0.0:80 -t /var/php/public
 
 
 
