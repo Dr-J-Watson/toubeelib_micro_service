@@ -19,8 +19,6 @@ services:
     volumes:
       - ./toubeelib/app/:/var/php/
     working_dir: /var/php
-    depends_on:
-      - toubeelib.db
     command: php -S 0.0.0.0:80 -t /var/php/public
 
   # service toubeelib.db : base de données postgresql
@@ -48,10 +46,8 @@ services:
       ports:
         - '6081:80'
       volumes:
-        - ./toubeelib/app/:/var/php/
+        - ./gateaway/app/:/var/php/
       working_dir: /var/php
-      depends_on:
-        - toubeelib.db
       command: php -S 0.0.0.0:80 -t /var/php/public
 
 
