@@ -17,20 +17,20 @@ use toubeelib\application\middlewares\Cors;
 
 return function( \Slim\App $app): \Slim\App {
 
-    // Ajout du middleware CORS
-    $app->add(toubeelib\application\middlewares\Cors::class);
+    // // Ajout du middleware CORS
+    // $app->add(toubeelib\application\middlewares\Cors::class);
 
-    // Options route pour CORS
-    $app->options('/{routes:.+}', function (Request $rq, Response $rs, array $args) : Response {
-        return $rs;
-    });
+    // // Options route pour CORS
+    // $app->options('/{routes:.+}', function (Request $rq, Response $rs, array $args) : Response {
+    //     return $rs;
+    // });
 
     // Routes
 
     $app->get('/', HomeAction::class)->setName('home');
 
     $app->get('/rdvs/{id}[/]', GetRDVAction::class)->setName('getRDV')
-        ->add(new JWTAuthMiddleware());
+        // ->add(new JWTAuthMiddleware());
 
     // Prendre un rendez vous
     $app->post('/rdvs[/]', CreateRDVAction::class)->setName('createRDV');
@@ -52,11 +52,11 @@ return function( \Slim\App $app): \Slim\App {
 
     // Obtenir le planning d'un praticien
     $app->get('/praticiens/{id}/planing[/]', GetPraticienPlanningAction::class)->setName('getPraticienPlanning')
-        ->add(new JWTAuthMiddleware());
+        // ->add(new JWTAuthMiddleware());
 
     // Obtenir les rendez-vous d'un patient
     $app->get('/patients/{patient_id}/rdvs[/]', GetPatientRDVAction::class)->setName('getPatientRDV')
-        ->add(new JWTAuthMiddleware());
+        // ->add(new JWTAuthMiddleware());
 
     // Gérer le cycle de vie des rendez-vous (honoré, non honoré, payé)
     $app->patch('/rdvs/{id}/cycle[/]', UpdateRDVCycleAction::class)->setName('updateRDVCycle');
@@ -66,7 +66,7 @@ return function( \Slim\App $app): \Slim\App {
 
     // Rafraîchir le token JWT
     $app->post('/refresh', AuthAction::class)->setName('refresh')
-        ->add(new JWTAuthMiddleware());
+        // ->add(new JWTAuthMiddleware());
 
     return $app;
 };
