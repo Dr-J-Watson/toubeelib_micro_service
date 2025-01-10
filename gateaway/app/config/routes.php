@@ -23,6 +23,9 @@ return function( \Slim\App $app): \Slim\App {
     $app->get('/', HomeAction::class)->setName('home');
 
     $app->get('/praticiens[/]', GenericPraticienAction::class)->setName('getPraticiens');
+    $app->get('/praticiens/{id}[/]', GenericPraticienAction::class)->setName('getPraticien');
+    $app->get('/praticiens/{id}/planing[/]', GenericPraticienAction::class)->setName('getPraticienPlanning');
+
 
     return $app;
 };

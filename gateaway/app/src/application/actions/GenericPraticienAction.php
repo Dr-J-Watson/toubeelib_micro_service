@@ -11,6 +11,7 @@ use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpUnauthorizedException;
+use toubeelib\core\repositoryInterfaces\RepositoryEntityNotFoundException;
 
 class GenericPraticienAction extends AbstractAction{
 
@@ -39,11 +40,14 @@ class GenericPraticienAction extends AbstractAction{
             throw new HttpInternalServerErrorException($request, $e->getMessage());
         } catch (ClientException $e ) {
             match($e->getCode()) {
-                401 => throw new HttpUnauthorizedException($request, " … "),
-                403 => throw new HttpForbiddenException($request, " … "),
-                404 => throw new HttpNotFoundException($request, " … ")
+                400 => throw new HttpInternalServerErrorException($request, $e->getMessage()),
+                401 => throw new HttpUnauthorizedException($request, $e->getMessage()),
+                403 => throw new HttpForbiddenException($request, $e->getMessage()),
+                404 => throw new HttpNotFoundException($request, $e->getMessage()),
             };
-        } catch (GuzzleException $e) {
+        } catch (RepositoryEntityNotFoundException $e) {
+            throw new HttpNotFoundException($request, $e->getMessage());
+        }catch (GuzzleException $e) {
             throw new HttpInternalServerErrorException($request, " … ");
         }
     }
