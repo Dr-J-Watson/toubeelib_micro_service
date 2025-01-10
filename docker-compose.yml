@@ -51,4 +51,15 @@ services:
     command: php -S 0.0.0.0:80 -t /var/php/public
 
 
+  # ===================APP-PRATICIENS================
 
+  app_praticiens:
+    build:
+      context: build
+      dockerfile: 8.3-cli.Dockerfile
+    ports:
+      - '6082:80'
+    volumes:
+      - ./app_praticiens/app/:/var/php/
+    working_dir: /var/php
+    command: php -S 0.0.0.0:80 -t /var/php/public
