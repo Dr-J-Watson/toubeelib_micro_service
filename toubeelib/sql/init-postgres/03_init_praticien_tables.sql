@@ -1,3 +1,5 @@
+CREATE DATABASE praticien;
+
 -- Connect to praticien database
 \c praticien;
 

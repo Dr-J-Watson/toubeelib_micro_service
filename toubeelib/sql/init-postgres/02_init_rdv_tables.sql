@@ -1,3 +1,5 @@
+CREATE DATABASE rdv;
+
 \list
 -- Connect to RDV database
 \c rdv;

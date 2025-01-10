@@ -1,3 +1,6 @@
+CREATE DATABASE patient;
+
+
 \list
 -- Connect to Patient database
 \c patient;

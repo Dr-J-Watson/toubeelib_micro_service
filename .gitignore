@@ -14,3 +14,5 @@ composer.phar
 composer.lock
 # Logs
 logs/*
+# Environment files
+*.env

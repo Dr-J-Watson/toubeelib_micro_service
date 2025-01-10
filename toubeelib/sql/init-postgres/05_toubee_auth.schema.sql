@@ -1,3 +1,5 @@
+CREATE DATABASE auth;
+
 \list
 \c auth;
 
