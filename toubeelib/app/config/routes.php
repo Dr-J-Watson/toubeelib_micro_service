@@ -29,7 +29,7 @@ return function( \Slim\App $app): \Slim\App {
 
     $app->get('/', HomeAction::class)->setName('home');
 
-    $app->get('/rdvs/{id}[/]', GetRDVAction::class)->setName('getRDV')
+    $app->get('/rdvs/{id}[/]', GetRDVAction::class)->setName('getRDV');
         // ->add(new JWTAuthMiddleware());
 
     // Prendre un rendez vous
@@ -51,11 +51,11 @@ return function( \Slim\App $app): \Slim\App {
     $app->get('/praticiens/{id}/disponibility[/]', \toubeelib\application\actions\GetPraticienDisponibilityAction::class)->setName('getPraticienDisponibility');
 
     // Obtenir le planning d'un praticien
-    $app->get('/praticiens/{id}/planing[/]', GetPraticienPlanningAction::class)->setName('getPraticienPlanning')
+    $app->get('/praticiens/{id}/planing[/]', GetPraticienPlanningAction::class)->setName('getPraticienPlanning');
         // ->add(new JWTAuthMiddleware());
 
     // Obtenir les rendez-vous d'un patient
-    $app->get('/patients/{patient_id}/rdvs[/]', GetPatientRDVAction::class)->setName('getPatientRDV')
+    $app->get('/patients/{patient_id}/rdvs[/]', GetPatientRDVAction::class)->setName('getPatientRDV');
         // ->add(new JWTAuthMiddleware());
 
     // Gérer le cycle de vie des rendez-vous (honoré, non honoré, payé)
@@ -65,7 +65,7 @@ return function( \Slim\App $app): \Slim\App {
     $app->post('/users/signin[/]', AuthAction::class)->setName('signin');
 
     // Rafraîchir le token JWT
-    $app->post('/refresh', AuthAction::class)->setName('refresh')
+    $app->post('/refresh', AuthAction::class)->setName('refresh');
         // ->add(new JWTAuthMiddleware());
 
     return $app;

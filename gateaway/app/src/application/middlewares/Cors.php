@@ -1,6 +1,6 @@
 <?php
 
-namespace toubeelib\application\middlewares;
+namespace gateway\application\middlewares;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
