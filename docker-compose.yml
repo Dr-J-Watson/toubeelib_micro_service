@@ -122,22 +122,22 @@ services:
 
   # ===================AUTH================
 
-  # api.auth:
-  #   build:
-  #     context: build
-  #     dockerfile: 8.3-cli.Dockerfile
-  #   ports:
-  #     - '6084:80'
-  #   volumes:
-  #     - ./app_auth/app/:/var/php/
-  #   working_dir: /var/php
-  #   command: php -S 0.0.0.0:80 -t /var/php/public
+  api.auth:
+    build:
+      context: build
+      dockerfile: 8.3-cli.Dockerfile
+    ports:
+      - '6084:80'
+    volumes:
+      - ./app_auth/app/:/var/php/
+    working_dir: /var/php
+    command: php -S 0.0.0.0:80 -t /var/php/public
 
-  # db.auth:
-  #   image: 'postgres:latest' 
-  #   env_file: ./env/db.env
-  #   ports:
-  #     - '5436:5432'
-  #   volumes:
-  #     - ./app_auth/sql/init-postgres:/docker-entrypoint-initdb.d
-  #     - app_auth.db:/var/lib/postgresql/data
+  db.auth:
+    image: 'postgres:latest' 
+    env_file: ./env/db.env
+    ports:
+      - '5436:5432'
+    volumes:
+      - ./app_auth/sql/init-postgres:/docker-entrypoint-initdb.d
+      - app_auth.db:/var/lib/postgresql/data

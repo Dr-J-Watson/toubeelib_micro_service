@@ -1,4 +1,5 @@
 <?php
+
 namespace gateway\application\actions;
 
 use GuzzleHttp\Exception\ClientException;
@@ -11,19 +12,22 @@ use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpUnauthorizedException;
-use gateway\core\repositoryInterfaces\RepositoryEntityNotFoundException;
 
-class GenericPraticienAction extends AbstractAction{
+class GenericAuthAction extends AbstractAction{
 
-    private \GuzzleHttp\Client $praticien_client;
+    private \GuzzleHttp\Client $auth_client;
 
-    public function __construct(\GuzzleHttp\Client $praticien_client)
+    public function __construct(\GuzzleHttp\Client $auth_client)
     {
-        $this->praticien_client = $praticien_client;
+        $this->auth_client = $auth_client;
     }
 
     public function __invoke(Request $request, Response $response, $args): Response
-    {
+        // //Authentification
+        // $app->post('/users/signin', GenericAuthAction::class)->setName('signin');
+        // $app->post('/users/register', GenericAuthAction::class)->setName('register');
+        // $app->post('/users/refresh', GenericAuthAction::class)->setName('refresh');
+
         $method = $request->getMethod();
         $path = $request->getUri()->getPath();
         $options = ['query' => $request->getQueryParams()];
@@ -35,7 +39,7 @@ class GenericPraticienAction extends AbstractAction{
             $options['headers'] = ['Authorization' => $auth];
         }
         try {
-            return $this->praticien_client->request($method, $path, $options);
+            return $this->auth_client->request($method, $path, $options);
         } catch (ConnectException | ServerException $e) {
             throw new HttpInternalServerErrorException($request, $e->getMessage());
         } catch (ClientException $e ) {
@@ -51,4 +55,5 @@ class GenericPraticienAction extends AbstractAction{
             throw new HttpInternalServerErrorException($request, " … ");
         }
     }
-}
+
+        

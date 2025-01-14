@@ -4,6 +4,7 @@ declare(strict_types=1);
 use gateway\application\middlewares\Cors;
 use gateway\application\actions\HomeAction;
 use gateway\application\actions\GenericPraticienAction;
+use gateway\application\actions\GenericAuthAction
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -22,9 +23,15 @@ return function( \Slim\App $app): \Slim\App {
     // Routes
     $app->get('/', HomeAction::class)->setName('home');
 
+    // Praticiens
     $app->get('/praticiens[/]', GenericPraticienAction::class)->setName('getPraticiens');
     $app->get('/praticiens/{id}[/]', GenericPraticienAction::class)->setName('getPraticien');
     $app->get('/praticiens/{id}/planing[/]', GenericPraticienAction::class)->setName('getPraticienPlanning');
+
+    //Authentification
+    $app->post('/users/signin', GenericAuthAction::class)->setName('signin');
+    $app->post('/users/register', GenericAuthAction::class)->setName('register');
+    $app->post('/users/refresh', GenericAuthAction::class)->setName('refresh');
 
 
     return $app;
