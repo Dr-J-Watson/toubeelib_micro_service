@@ -67,14 +67,14 @@ services:
     working_dir: /var/php
     command: php -S 0.0.0.0:80 -t /var/php/public
 
-  # db.praticiens:
-  #   image: 'postgres:latest' 
-  #   env_file: ./env/db.env
-  #   ports:
-  #     - '5433:5432'
-  #   volumes:
-  #     - ./app_praticiens/sql/init-postgres:/docker-entrypoint-initdb.d
-  #     - app_praticiens.db:/var/lib/postgresql/data
+  db.praticiens:
+    image: 'postgres:latest'
+    env_file: ./env/db.env
+    ports:
+      - '5433:5432'
+    volumes:
+      - ./app_praticiens/sql/init-postgres:/docker-entrypoint-initdb.d
+      - app_praticiens.db:/var/lib/postgresql/data
 
   # ===================RDV================
 
