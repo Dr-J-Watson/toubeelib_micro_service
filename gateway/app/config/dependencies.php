@@ -20,7 +20,7 @@ return [
 
     'praticien_client' => function(ContainerInterface $c){
         return new GuzzleHttp\Client([
-            'base_uri' => 'http://api.toubeelib:80',
+            'base_uri' => 'http://api.praticiens:80',
             'timeout' => 2.0,
         ]);
     },

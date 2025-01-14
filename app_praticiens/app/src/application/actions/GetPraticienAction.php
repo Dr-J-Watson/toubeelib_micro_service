@@ -6,7 +6,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Routing\RouteContext;
 use app_praticiens\core\services\praticien\ServicePraticien;
-use app_praticiens\core\services\rdv\ServiceRDVInterface;
 use app_praticiens\application\renderer\JsonRenderer;
 
 class GetPraticienAction extends AbstractAction{
@@ -28,7 +27,7 @@ class GetPraticienAction extends AbstractAction{
             'praticien' => $praticien,
             'links' => [
                 'planning' => $routeParser->urlFor('getPraticienPlanning', ['id' => $praticien->ID]),
-                'disponibility' => $routeParser->urlFor('getPraticienDisponibility', ['id' => $praticien->ID])
+                //'disponibility' => $routeParser->urlFor('getPraticienDisponibility', ['id' => $praticien->ID])
             ]
         ];
         return JsonRenderer::render($rs, 200, $data);
