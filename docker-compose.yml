@@ -1,6 +1,14 @@
 volumes:
   toubeelib.db:
     driver: local
+  app_praticiens.db:
+    driver: local
+  app_rdv.db:
+    driver: local
+  app_patients.db:
+    driver: local
+  app_auth.db:
+    driver: local
 
 services:
 
