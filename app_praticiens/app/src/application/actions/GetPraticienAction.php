@@ -27,8 +27,8 @@ class GetPraticienAction extends AbstractAction{
             'type' => 'ressources',
             'praticien' => $praticien,
             'links' => [
-                'planning' => $routeParser->urlFor('getPraticienPlanning', ['id' => $praticien->ID]),
-                'disponibility' => $routeParser->urlFor('getPraticienDisponibility', ['id' => $praticien->ID])
+//                'planning' => $routeParser->urlFor('getPraticienPlanning', ['id' => $praticien->ID]),
+//                'disponibility' => $routeParser->urlFor('getPraticienDisponibility', ['id' => $praticien->ID])
             ]
         ];
         return JsonRenderer::render($rs, 200, $data);

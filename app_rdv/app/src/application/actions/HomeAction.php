@@ -1,6 +1,6 @@
 <?php
 
-namespace app_praticiens\application\actions;
+namespace app_rdv\application\actions;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -10,7 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 
     public function __invoke(ServerRequestInterface $rq, ResponseInterface $rs, array $args): ResponseInterface {
-        $rs->getBody()->write('Welcome on praticiens API');
+        $rs->getBody()->write('Welcome to RDV API');
         return $rs;}
 
 }

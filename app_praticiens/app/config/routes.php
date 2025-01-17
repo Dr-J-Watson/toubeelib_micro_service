@@ -10,8 +10,8 @@ use app_praticiens\application\middlewares\Cors;
 
 return function( \Slim\App $app): \Slim\App {
 
-    // Ajout du middleware CORS
-    $app->add(Cors::class);
+//    // Ajout du middleware CORS
+//    $app->add(Cors::class);
 
     // Options route pour CORS
     $app->options('/{routes:.+}', function (Request $rq, Response $rs, array $args) : Response {
