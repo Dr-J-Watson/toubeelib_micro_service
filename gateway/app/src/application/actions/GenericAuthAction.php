@@ -12,6 +12,7 @@ use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpUnauthorizedException;
+use gateway\core\repositoryInterfaces\RepositoryEntityNotFoundException;
 
 class GenericAuthAction extends AbstractAction{
 
@@ -24,11 +25,6 @@ class GenericAuthAction extends AbstractAction{
 
     public function __invoke(Request $request, Response $response, $args): Response
     {
-        // //Authentification
-        // $app->post('/users/signin', GenericAuthAction::class)->setName('signin');
-        // $app->post('/users/register', GenericAuthAction::class)->setName('register');
-        // $app->post('/users/refresh', GenericAuthAction::class)->setName('refresh');
-
         $method = $request->getMethod();
         $path = $request->getUri()->getPath();
         $options = ['query' => $request->getQueryParams()];
@@ -49,9 +45,12 @@ class GenericAuthAction extends AbstractAction{
                 401 => throw new HttpUnauthorizedException($request, $e->getMessage()),
                 403 => throw new HttpForbiddenException($request, $e->getMessage()),
                 404 => throw new HttpNotFoundException($request, $e->getMessage()),
+                500 => throw new HttpInternalServerErrorException($request, $e->getMessage()),
             };
+        } catch (RepositoryEntityNotFoundException $e) {
+            throw new HttpNotFoundException($request, $e->getMessage());
         } catch (GuzzleException $e) {
-            throw new HttpInternalServerErrorException($request, " … ");
+            throw new HttpInternalServerErrorException($request, $e->getMessage()); 
         }
 
     }

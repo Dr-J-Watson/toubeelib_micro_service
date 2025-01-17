@@ -65,7 +65,7 @@ return function( \Slim\App $app): \Slim\App {
     $app->post('/users/signin[/]', AuthAction::class)->setName('signin');
 
     // Rafraîchir le token JWT
-    $app->post('/refresh', AuthAction::class)->setName('refresh');
+    $app->post('/users/refresh', AuthAction::class)->setName('refresh');
         // ->add(new JWTAuthMiddleware());
 
     return $app;

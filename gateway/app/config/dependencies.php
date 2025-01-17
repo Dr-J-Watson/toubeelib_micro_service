@@ -1,6 +1,7 @@
 <?php
 
 use gateway\application\actions\GenericPraticienAction;
+use gateway\application\actions\GenericAuthAction;
 use Psr\Container\ContainerInterface;
 
 return [
@@ -25,8 +26,19 @@ return [
         ]);
     },
 
+    'auth_client' => function(ContainerInterface $c){
+        return new GuzzleHttp\Client([
+            'base_uri' => 'http://api.toubeelib:80',
+            'timeout' => 2.0,
+        ]);
+    },
+
     GenericPraticienAction::class => function(ContainerInterface $c) {
         return new GenericPraticienAction($c->get('praticien_client'));
+    },
+
+    GenericAuthAction::class => function(ContainerInterface $c) {
+        return new GenericAuthAction($c->get('auth_client'));
     },
 
 ];
