@@ -13,17 +13,19 @@ class AuthAction extends AbstractAction{
     public function __invoke(Request $rq, Response $rs, $args): Response{
 
         if($rq->getUri()->getPath() == '/users/refresh'){ //Refresh token
-            $body = $rq->getParsedBody();
-            $token = $body['rtoken'] ?? null;
+            
+            $header = $rq->getHeader('Authorization');
+
+            $token = $header[0] ?? null;
 
             if(is_null($token)){
                 $rs->getBody()->write('Refresh token is required');
                 return $rs->withStatus(400);
             }
- 
 
             try{
-                $auth = JWTAuthnProvider::class->refresh($token);
+                $auth = new JWTAuthnProvider();
+                $auth = $auth->refresh($token);
                 $responseBody = [
                     'atoken' => $auth->token,
                     'rtoken' => $auth->refreshToken
