@@ -1,9 +1,9 @@
 <?php
 
-namespace toubeelib\core\services\rdv;
+namespace app_rdv\core\services\rdv;
 
-use toubeelib\core\dto\InputRDVDTO;
-use toubeelib\core\dto\RDVDTO;
+use app_rdv\core\dto\InputRDVDTO;
+use app_rdv\core\dto\RDVDTO;
 
 interface ServiceRDVInterface
 {
@@ -27,5 +27,12 @@ interface ServiceRDVInterface
     public function getRDVByPatient(string $idPatient): array;
 
     public function getPraticienDisponibillity(string $idPraticien, string $dateDebut, string $dateFin): array;
+
+    public function updateRDVCycle(string $idRDV, string $cycle): RDVDTO;
+
+    // public function createPraticien(InputPraticienDTO $p): PraticienDTO;
+    // public function getPraticienById(string $id): PraticienDTO;
+    // public function getSpecialiteById(string $id): SpecialiteDTO;
+
 
 }

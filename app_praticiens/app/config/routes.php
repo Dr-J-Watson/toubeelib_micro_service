@@ -6,7 +6,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use app_praticiens\application\actions\CreatePraticienAction;
 use app_praticiens\application\actions\HomeAction;
 use app_praticiens\application\middlewares\Cors;
-use app_praticiens\application\actions\GetPraticienPlanningAction;
 
 
 return function( \Slim\App $app): \Slim\App {
@@ -32,10 +31,6 @@ return function( \Slim\App $app): \Slim\App {
     // Obtenir les détails d'un praticien
     $app->get('/praticiens/{id}[/]', \app_praticiens\application\actions\GetPraticienAction::class)->setName('getPraticien');
 
-    $app->get('/praticiens/{id}/disponibility[/]', \app_praticiens\application\actions\GetPraticienDisponibilityAction::class)->setName('getPraticienDisponibility');
-
-    // Obtenir le planning d'un praticien
-    $app->get('/praticiens/{id}/planing[/]', GetPraticienPlanningAction::class)->setName('getPraticienPlanning');
 
     return $app;
 };

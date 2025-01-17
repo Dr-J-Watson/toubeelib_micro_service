@@ -59,8 +59,8 @@ class CreatePraticienAction extends AbstractAction
                 'praticien' => $praticien,
                 'links' => [
                     'self' => $routeParser->urlFor('getPraticien', ['id' => $praticien->ID]),
-                    'planning' => $routeParser->urlFor('getPraticienPlanning', ['id' => $praticien->ID]),
-                    'dispobilite' => $routeParser->urlFor('getPraticienDisponibility', ['id' => $praticien->ID])
+//                    'planning' => $routeParser->urlFor('getPraticienPlanning', ['id' => $praticien->ID]),
+//                    'dispobilite' => $routeParser->urlFor('getPraticienDisponibility', ['id' => $praticien->ID])
                 ]
             ];
 

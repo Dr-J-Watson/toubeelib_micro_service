@@ -5,6 +5,7 @@ use gateway\application\middlewares\Cors;
 use gateway\application\actions\HomeAction;
 use gateway\application\actions\GenericPraticienAction;
 use gateway\application\actions\GenericAuthAction;
+use gateway\application\actions\GenericRdvAction;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -32,6 +33,10 @@ return function( \Slim\App $app): \Slim\App {
     $app->post('/users/signin[/]', GenericAuthAction::class)->setName('signin');
     $app->post('/users/register[/]', GenericAuthAction::class)->setName('register');
     $app->post('/users/refresh[/]', GenericAuthAction::class)->setName('refresh');
+
+    //RDV
+    $app->get('/rdvs[/]', GenericRdvAction::class)->setName('getRDVs');
+    $app->get('/rdvs/{id}[/]', GenericRdvAction::class)->setName('getRDV');
 
 
     return $app;

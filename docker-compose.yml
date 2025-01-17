@@ -78,16 +78,16 @@ services:
 
   # ===================RDV================
 
-  # api.rdv:
-  #   build:
-  #     context: build
-  #     dockerfile: 8.3-cli.Dockerfile
-  #   ports:
-  #     - '6082:80'
-  #   volumes:
-  #     - ./app_rdv/app/:/var/php/
-  #   working_dir: /var/php
-  #   command: php -S 0.0.0.0:80 -t /var/php/public
+  api.rdv:
+     build:
+       context: build
+       dockerfile: 8.3-cli.Dockerfile
+     ports:
+       - '6082:80'
+     volumes:
+       - ./app_rdv/app/:/var/php/
+     working_dir: /var/php
+     command: php -S 0.0.0.0:80 -t /var/php/public
 
   # db.rdv:
   #   image: 'postgres:latest' 
