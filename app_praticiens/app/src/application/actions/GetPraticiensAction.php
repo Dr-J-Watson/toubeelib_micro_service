@@ -6,7 +6,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Routing\RouteContext;
 use app_praticiens\core\services\praticien\ServicePraticien;
-use app_praticiens\core\services\rdv\ServiceRDVInterface;
 use app_praticiens\application\renderer\JsonRenderer;
 
 class GetPraticiensAction extends AbstractAction

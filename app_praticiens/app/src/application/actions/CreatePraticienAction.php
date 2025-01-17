@@ -11,7 +11,6 @@ use app_praticiens\application\renderer\JsonRenderer;
 use app_praticiens\core\dto\InputPraticienDTO;
 use app_praticiens\core\services\praticien\ServicePraticien;
 use app_praticiens\core\services\praticien\ServicePraticienInterface;
-use app_praticiens\core\services\rdv\ServiceRDVInterface;
 
 
 class CreatePraticienAction extends AbstractAction

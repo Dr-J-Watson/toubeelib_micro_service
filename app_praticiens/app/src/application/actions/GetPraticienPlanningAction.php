@@ -31,7 +31,7 @@ class GetPraticienPlanningAction extends AbstractAction{
                 'praticienID' => $pratitientID,
                 'dateDebut' => $dateDebut,
                 'dateFin' => $dateFin,
-                'disponibility' => $disponibility,
+                //'disponibility' => $disponibility,
             ];
             return JsonRenderer::render($rs, 200, $data);
         }
