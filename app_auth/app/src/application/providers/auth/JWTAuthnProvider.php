@@ -1,20 +1,20 @@
 <?php
 
-namespace toubeelib\application\providers\auth;
+namespace app_auth\application\providers\auth;
 
 use PDO;
 use PhpParser\Token;
-use toubeelib\application\providers\auth\AuthnProviderInterface;
-use toubeelib\core\dto\AuthDTO;
-use toubeelib\core\dto\CredentialsDTO;
-use toubeelib\core\services\auth\AuthnService;
+use app_auth\application\providers\auth\AuthnProviderInterface;
+use app_auth\core\dto\AuthDTO;
+use app_auth\core\dto\CredentialsDTO;
+use app_auth\core\services\auth\AuthnService;
 
 class JWTAuthnProvider implements AuthnProviderInterface{
 
     private PDO $db;
 
     public function __construct() {
-        $pdo = new PDO('pgsql:host=db.toubeelib;dbname=auth', 'root', 'root');
+        $pdo = new PDO('pgsql:host=db.auth;dbname=auth', 'root', 'root');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->db = $pdo;
     }

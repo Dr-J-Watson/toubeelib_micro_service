@@ -16,6 +16,7 @@ CREATE TABLE "public"."users" (
 
 
 INSERT INTO "users" ("id", "email", "password", "role") VALUES
+('f3b3b3b3-3b3b-3b3b-3b3b-3b3b3b3b3b3b',	'test.test@test.test', '$2y$10$61/PtaYijAEh06ulXcYv8OsH5mFugmCjOCFkuenHSxBnfsGmFi99m', 0),
 ('118a9bca-b30e-360a-9acb-0f44498fa9cb',	'munoz.theophile@laposte.net',	'$2y$10$jdB9eypmLmifN5i5n5IwrOi9G6tySqYhsFAfJhHSgYmldTmuaKd3u',	0),
 ('bdbc09de-d523-34a5-bec7-743953a7cd2f',	'sgodard@vasseur.com',	'$2y$10$w5DrBc0vbyOyZnuTeNuBAuSCDX2NuSrVQAb9w4bN2FD0otn2tazBW',	0),
 ('33c59f91-10ff-3e5a-a4dd-ffb5e4d1d513',	'lledoux@dbmail.com',	'$2y$10$3jurBwm79Qc0DacDKeYele9UTwRlEd0Aadk.9lrYUw037cgJ91yZm',	0),
