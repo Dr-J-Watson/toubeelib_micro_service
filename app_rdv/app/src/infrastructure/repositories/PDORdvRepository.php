@@ -1,6 +1,7 @@
 <?php
 
 namespace app_rdv\infrastructure\repositories;
+use app_rdv\core\dto\RDVDTO;
 use app_rdv\core\repositoryInterfaces\RDVRepositoryInterface;
 use app_rdv\core\domain\entities\rdv\RDV;
 use PDO;
@@ -84,6 +85,10 @@ class PDORdvRepository implements RDVRepositoryInterface
         return $rdvs;
     }
 
+    /**
+     * @return RDVDTO[]
+     * @throws \DateMalformedStringException
+     */
     public function getRDVByPraticienId(string $id, ?string $dateDebut, ?string $dateFin): array
     {
         $stmt = $this->pdo->prepare('SELECT * FROM rdv WHERE praticien_id = :id AND date_heure >= :date_debut AND date_heure <= :date_fin');
@@ -93,7 +98,7 @@ class PDORdvRepository implements RDVRepositoryInterface
         foreach ($rows as $row) {
             $rdv = new RDV($row['praticien_id'], $row['patient_id'], $row['type_id'], new \DateTimeImmutable($row['date_heure']));
             $rdv->setID($row['id']);
-            $rdvs[] = $rdv;
+            $rdvs[] = $rdv->toDTO();
         }
         return $rdvs;
     }

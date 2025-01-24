@@ -7,7 +7,7 @@ class RDVDTO extends DTO implements \JsonSerializable{
     protected String $ID;
     protected \DateTimeInterface $dateHeure;
     protected int $duree = 30;
-    protected PraticienDTO $praticien;
+    protected ?PraticienDTO $praticien;
     protected String $patientID;
     protected String $statut;
     protected String $type;
@@ -23,15 +23,19 @@ class RDVDTO extends DTO implements \JsonSerializable{
     }
 
     public function jsonSerialize(): array{
-        return [
+        $data = [
             'ID' => $this->ID,
             'dateHeure' => $this->dateHeure->format('Y-m-d H:i:s'),
             'duree' => $this->duree,
             'patientID' => $this->patientID,
             'statut' => $this->statut,
             'type' => $this->type,
-            'praticien' => $this->praticien
         ];
+
+        if ($this->praticien !== null) {
+            $data['praticien'] = $this->praticien->jsonSerialize();
+        }
+        return $data;
     }
 
     public function setPraticien(PraticienDTO $praticien): void {

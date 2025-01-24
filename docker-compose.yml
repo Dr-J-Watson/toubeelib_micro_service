@@ -12,6 +12,23 @@ volumes:
 
 services:
 
+  # ===================MESSAGE BROKER================
+  rabbitmq:
+    image: rabbitmq:4-management
+    ports:
+      - '15672:15672'
+      - '5672:5672'
+    volumes:
+      - ./rabbitmq_dir:/var/lib/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 8s
+      timeout: 30s
+      retries: 3
+
   # service administration des bases de données
   adminer:
     image: adminer
@@ -66,6 +83,9 @@ services:
       - ./app_praticiens/app/:/var/php/
     working_dir: /var/php
     command: php -S 0.0.0.0:80 -t /var/php/public
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
 
   db.praticiens:
     image: 'postgres:latest'
@@ -88,6 +108,12 @@ services:
        - ./app_rdv/app/:/var/php/
      working_dir: /var/php
      command: php -S 0.0.0.0:80 -t /var/php/public
+     env_file:
+       - ./env/app_rdv.env
+     depends_on:
+       rabbitmq:
+        condition: service_healthy
+
 
   # db.rdv:
   #   image: 'postgres:latest' 

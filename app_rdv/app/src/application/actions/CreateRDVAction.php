@@ -2,24 +2,28 @@
 
 namespace app_rdv\application\actions;
 
+use app_rdv\application\interfaces\messages\RdvMessageSenderInterface;
+use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Respect\Validation\Validator;
-use Slim\Routing\RouteContext;
-use toubeelib\application\renderer\JsonRenderer;
-use toubeelib\core\dto\InputRDVDTO;
-use toubeelib\core\services\rdv\ServiceRDVInterface;
-use Exception;
 use Slim\Exception\HttpBadRequestException;
+use Slim\Routing\RouteContext;
+use app_rdv\application\renderer\JsonRenderer;
+use app_rdv\core\dto\InputRDVDTO;
+use app_rdv\core\services\rdv\ServiceRDVInterface;
 
 class CreateRDVAction extends AbstractAction
 {
 
     private ServiceRDVInterface $serviceRDV;
+    private RdvMessageSenderInterface $messageSender;
 
-    public function __construct(ServiceRDVInterface $serviceRDV)
+    public function __construct(ServiceRDVInterface $serviceRDV, RdvMessageSenderInterface $messageSender)
     {
         $this->serviceRDV = $serviceRDV;
+        $this->messageSender = $messageSender;
+
     }
 
     /**
@@ -53,16 +57,19 @@ class CreateRDVAction extends AbstractAction
 
         $rdv = $this->serviceRDV->createRDV($rdvInputDto);
 
+        //send message to message broker to notify users
+        $this->messageSender->sendMessage($rdv, 'create');
+
         $routeContext = RouteContext::fromRequest($rq);
         $routeParser = $routeContext->getRouteParser();
 
         $data = [
             'type' => 'ressources',
             'rdv' => $rdv,
-            'links' => [
-                'self' => $routeParser->urlFor('createRDV') . $rdv->ID,
-                'praticien' => $routeParser->urlFor('getPraticien', ['id' => $rdv->praticienID])
-            ]
+//            'links' => [
+//                'self' => $routeParser->urlFor('createRDV') . $rdv->ID,
+//                'praticien' => $routeParser->urlFor('getPraticien', ['id' => $rdv->praticienID])
+//            ]
         ];
         $rs = $rs->withHeader('Location', '/rdvs/' . $rdv->ID);
         return JsonRenderer::render($rs, 201, $data);
