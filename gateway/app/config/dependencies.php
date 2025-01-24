@@ -1,6 +1,7 @@
 <?php
 
 use gateway\application\actions\GenericPraticienAction;
+use gateway\application\actions\GenericRdvAction;
 use Psr\Container\ContainerInterface;
 
 return [

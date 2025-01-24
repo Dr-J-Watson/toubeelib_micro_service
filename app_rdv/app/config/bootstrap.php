@@ -2,9 +2,7 @@
 
 use DI\ContainerBuilder;
 use Slim\Factory\AppFactory;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use app_rdv\application\middlewares\Cors;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 
 
@@ -15,6 +13,25 @@ $builder->addDefinitions(__DIR__ . '/dependencies.php');
 $c=$builder->build();
 $app = AppFactory::createFromContainer($c);
 
+//init rabit mq connection
+$connection = new AMQPStreamConnection(
+    getenv('AMQP_HOST'),
+    getenv('AMQP_PORT'),
+    getenv('AMQP_USER'),
+    getenv('AMQP_PASSWORD')
+);
+$channel = $connection->channel();
+
+//init fanout exchange
+$exchange = getenv('NOTIFY_EXCHANGE');
+$channel->exchange_declare($exchange, 'fanout', false, true, false);
+$queue_name = "mail";
+$channel->queue_declare($queue_name, false, true, false, false);
+$channel->queue_bind($queue_name , $exchange);
+
+// Fermeture de la connexion
+$channel->close();
+$connection->close();
 
 $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();

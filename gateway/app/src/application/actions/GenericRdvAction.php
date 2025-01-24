@@ -11,7 +11,6 @@ use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpUnauthorizedException;
-use gateway\core\repositoryInterfaces\RepositoryEntityNotFoundException;
 
 class GenericRdvAction extends AbstractAction{
 
@@ -45,10 +44,8 @@ class GenericRdvAction extends AbstractAction{
                 403 => throw new HttpForbiddenException($request, $e->getMessage()),
                 404 => throw new HttpNotFoundException($request, $e->getMessage()),
             };
-        } catch (RepositoryEntityNotFoundException $e) {
-            throw new HttpNotFoundException($request, $e->getMessage());
         }catch (GuzzleException $e) {
-            throw new HttpInternalServerErrorException($request, " … ");
+            throw new HttpInternalServerErrorException($request, $e->getMessage());
         }
     }
 }

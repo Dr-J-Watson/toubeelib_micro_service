@@ -12,6 +12,7 @@ use app_rdv\application\actions\CancelRDVAction;
 use app_rdv\application\actions\GetPraticienDisponibilityAction;
 use app_rdv\application\actions\GetPraticienPlanningAction;
 use app_rdv\application\actions\UpdateRDVCycleAction;
+use app_rdv\application\interfaces\messages\RdvMessageSenderInterface;
 
 
 
@@ -46,6 +47,19 @@ return [
         ]);
     },
 
+    'rdv_message_broker' => function(ContainerInterface $c){
+        return new \PhpAmqpLib\Connection\AMQPStreamConnection(
+            getenv('AMQP_HOST'),
+            getenv('AMQP_PORT'),
+            getenv('AMQP_USER'),
+            getenv('AMQP_PASSWORD')
+        );
+    },
+
+    RdvMessageSenderInterface::class => function(ContainerInterface $c){
+        return new \app_rdv\infrastructure\adapters\RabbitMQRdvMessageSender($c->get('rdv_message_broker'), getenv('NOTIFY_EXCHANGE'));
+    },
+
     RDVRepositoryInterface::class => function(ContainerInterface $c){
         return new \app_rdv\infrastructure\repositories\PDORdvRepository($c->get('rdv.pdo'));
     },
@@ -68,7 +82,7 @@ return [
     },
 
     CreateRDVAction::class => function(ContainerInterface $c){
-        return new \app_rdv\application\actions\CreateRDVAction($c->get(ServiceRDVInterface::class));
+        return new \app_rdv\application\actions\CreateRDVAction($c->get(ServiceRDVInterface::class), $c->get(RdvMessageSenderInterface::class));
     },
 
     CancelRDVAction::class => function(ContainerInterface $c){

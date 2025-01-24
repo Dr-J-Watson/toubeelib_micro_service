@@ -11,7 +11,6 @@ use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpUnauthorizedException;
-use gateway\core\repositoryInterfaces\RepositoryEntityNotFoundException;
 
 class GenericPraticienAction extends AbstractAction{
 
@@ -48,7 +47,7 @@ class GenericPraticienAction extends AbstractAction{
         } catch (RepositoryEntityNotFoundException $e) {
             throw new HttpNotFoundException($request, $e->getMessage());
         }catch (GuzzleException $e) {
-            throw new HttpInternalServerErrorException($request, " … ");
+            throw new HttpInternalServerErrorException($request, $e->getMessage());
         }
     }
 }
