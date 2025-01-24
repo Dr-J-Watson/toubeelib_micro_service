@@ -1,4 +1,5 @@
 <?php
+
 namespace gateway\application\actions;
 
 use GuzzleHttp\Exception\ClientException;

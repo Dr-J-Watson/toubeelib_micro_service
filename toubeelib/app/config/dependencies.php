@@ -32,13 +32,13 @@ return [
     },
 
     'rdv.pdo' => function(ContainerInterface $c) {
-        $pdo = new PDO('pgsql:host=toubeelib.db;dbname=rdv', 'root', 'root');
+        $pdo = new PDO('pgsql:host=db.toubeelib;dbname=rdv', 'root', 'root');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $pdo;
     },
 
     'praticien.pdo' => function(ContainerInterface $c) {
-        $pdo = new PDO('pgsql:host=toubeelib.db;dbname=praticien', 'root', 'root');
+        $pdo = new PDO('pgsql:host=db.toubeelib;dbname=praticien', 'root', 'root');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $pdo;
     },

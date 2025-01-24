@@ -26,6 +26,14 @@ return [
         ]);
     },
 
+
+    'auth_client' => function(ContainerInterface $c){
+        return new GuzzleHttp\Client([
+            'base_uri' => 'http://api.toubeelib:80',
+            'timeout' => 2.0,
+        ]);
+    },
+
     'rdv_client' => function(ContainerInterface $c){
         return new GuzzleHttp\Client([
             'base_uri' => 'http://api.rdv:80',
@@ -35,6 +43,10 @@ return [
 
     GenericPraticienAction::class => function(ContainerInterface $c) {
         return new GenericPraticienAction($c->get('praticien_client'));
+    },
+
+    GenericAuthAction::class => function(ContainerInterface $c) {
+        return new GenericAuthAction($c->get('auth_client'));
     },
 
     GenericRdvAction::class => function(ContainerInterface $c) {

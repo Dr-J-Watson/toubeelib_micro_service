@@ -22,13 +22,13 @@ class JWTManager{
         try {
             return array(JWT::decode($token, new Key(getenv('JWT_SECRET_KEY'),'HS512' )));
         } catch (ExpiredException $e) {
-            return \ExpiredException::class;
+            return ['error' => \ExpiredException::class];
         } catch (SignatureInvalidException $e) {
-            return \SignatureInvalidException::class;
+            return ['error' => \SignatureInvalidException::class];
         } catch (BeforeValidException $e) {
-            return \BeforeValidException::class;
+            return ['error' => \BeforeValidException::class];
         } catch (\UnexpectedValueException $e) {
-            return \UnexpectedValueException::class;
+            return ['error' => \UnexpectedValueException::class];
         }
     }
 }

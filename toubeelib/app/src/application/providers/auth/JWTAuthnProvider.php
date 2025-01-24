@@ -14,7 +14,7 @@ class JWTAuthnProvider implements AuthnProviderInterface{
     private PDO $db;
 
     public function __construct() {
-        $pdo = new PDO('pgsql:host=toubeelib.db;dbname=auth', 'root', 'root');
+        $pdo = new PDO('pgsql:host=db.toubeelib;dbname=auth', 'root', 'root');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->db = $pdo;
     }
@@ -76,7 +76,7 @@ class JWTAuthnProvider implements AuthnProviderInterface{
         return $user2;
     }
 
-    public function refresh(Token $token): AuthDTO{
+    public function refresh(string $token): AuthDTO{
         $payload = JWTManager::class->decodeToken($token);
 
         $token = JWTManager::class->creatAccessToken($payload);
@@ -86,7 +86,7 @@ class JWTAuthnProvider implements AuthnProviderInterface{
         return $auth->addToken($token, $rtoken);
     }
 
-    public function getSignedInUser(Token $token): AuthDTO{
+    public function getSignedInUser(string $token): AuthDTO{
         $payload = JWTManager::class->decodeToken($token);
         return new AuthDTO($payload['sub'], $payload['data']['user'], $payload['data']['role']);
     }

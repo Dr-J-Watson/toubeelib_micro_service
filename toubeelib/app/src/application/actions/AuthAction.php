@@ -12,11 +12,20 @@ class AuthAction extends AbstractAction{
 
     public function __invoke(Request $rq, Response $rs, $args): Response{
 
-        if($rq->getUri()->getPath() == '/refresh'){ //Refresh token
-            $h = $rq->getHeader('Authorization')[0] ;
-            $token = sscanf($h, "Bearer %s")[0];
+        if($rq->getUri()->getPath() == '/users/refresh'){ //Refresh token
+            
+            $header = $rq->getHeader('Authorization');
+
+            $token = $header[0] ?? null;
+
+            if(is_null($token)){
+                $rs->getBody()->write('Refresh token is required');
+                return $rs->withStatus(400);
+            }
+
             try{
-                $auth = JWTAuthnProvider::class->refresh($token);
+                $auth = new JWTAuthnProvider();
+                $auth = $auth->refresh($token);
                 $responseBody = [
                     'atoken' => $auth->token,
                     'rtoken' => $auth->refreshToken
@@ -33,21 +42,16 @@ class AuthAction extends AbstractAction{
 
 
         }else { //Signin
-            $data = $rq->getHeader('Authorization')[0];
-            $authData = str_replace('Basic ', '', $data);
+            $body = $rq->getParsedBody();
+            $email = $body['email'] ?? null;
+            $password = $body['password'] ?? null;
 
-            // Décodage de la chaîne Base64
-            $decodedData = base64_decode($authData);
-
-            // Séparation des informations username:password
-            list($username, $password) = explode(':', $decodedData);
-
-            if (!isset($username) || !isset($password)) {
-                $rs->getBody()->write('Email and password are required.');
+            if (is_null($email) || is_null($password)) {
+                $rs->getBody()->write('Email and password are required');
                 return $rs->withStatus(400);
             }
 
-            $credentials = new CredentialsDTO($username, $password);
+            $credentials = new CredentialsDTO($email, $password);
 
             try {
                 $jwtAuthnProvider = new JWTAuthnProvider();

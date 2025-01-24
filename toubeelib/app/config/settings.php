@@ -6,7 +6,7 @@ return  [
     'logs.dir' => __DIR__ . '/../var/logs',
     'db' => [
         'driver' => 'postgres',
-        'host' => 'toubeelib.db',
+        'host' => 'db.toubeelib',
         'database' => 'toubeelib',
         'username' => 'root',
         'password' => 'root',
