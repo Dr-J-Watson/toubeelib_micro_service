@@ -11,24 +11,30 @@ use Firebase\JWT\BeforeValidException;
 class JWTManager{
 
     public function creatAccessToken(array $payload): string{
+        $payload['exp'] = time() + 3600; // 1 hour expiration
         return JWT::encode($payload, getenv('JWT_SECRET_KEY'), 'HS512');
     }
 
     public function creatRefreshToken(array $payload): string{
+        $payload['exp'] = time() + 604800;// 1 week expiration
         return JWT::encode($payload, getenv('JWT_SECRET_KEY'), 'HS512');
     }
 
     public function decodeToken(string $token): array{
         try {
-            return array(JWT::decode($token, new Key(getenv('JWT_SECRET_KEY'),'HS512' )));
+            $decoded = (array) JWT::decode($token, new Key(getenv('JWT_SECRET_KEY'),'HS512' ));
+            if (isset($decoded['data']) && is_object($decoded['data'])) {
+                $decoded['data'] = (array) $decoded['data'];
+            }
+            return $decoded;
         } catch (ExpiredException $e) {
-            return ['error' => \ExpiredException::class];
+            throw new \Exception('Token expired');
         } catch (SignatureInvalidException $e) {
-            return ['error' => \SignatureInvalidException::class];
+            throw new \Exception('Invalid token signature');
         } catch (BeforeValidException $e) {
-            return ['error' => \BeforeValidException::class];
+            throw new \Exception('Token from the future');
         } catch (\UnexpectedValueException $e) {
-            return ['error' => \UnexpectedValueException::class];
+            throw new \Exception('Unexpected token value');
         }
     }
 }

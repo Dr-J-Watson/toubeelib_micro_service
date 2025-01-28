@@ -15,6 +15,6 @@ return function( \Slim\App $app): \Slim\App {
     // Rafraîchir le token JWT
     $app->post('/users/refresh', RefreshTokenAuthAction::class)->setName('refresh');
 
-    $app->post('/users/validate', ValidateTokenAuthAction::class)->setName('refresh');
+    $app->post('/tokens/validate', ValidateTokenAuthAction::class)->setName('refresh');
     return $app;
 };
