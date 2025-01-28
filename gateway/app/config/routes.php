@@ -2,12 +2,14 @@
 declare(strict_types=1);
 
 use gateway\application\middlewares\Cors;
+use gateway\application\middlewares\AuthMiddleware;
 use gateway\application\actions\HomeAction;
 use gateway\application\actions\GenericPraticienAction;
 use gateway\application\actions\GenericAuthAction;
 use gateway\application\actions\GenericRdvAction;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+
 
 
 
@@ -27,17 +29,23 @@ return function( \Slim\App $app): \Slim\App {
     // Praticiens
     $app->get('/praticiens[/]', GenericPraticienAction::class)->setName('getPraticiens');
     $app->get('/praticiens/{id}[/]', GenericPraticienAction::class)->setName('getPraticien');
-    $app->get('/praticiens/{id}/planing[/]', GenericRdvAction::class)->setName('getPraticienPlanning');
+    $app->get('/praticiens/{id}/planing[/]', GenericRdvAction::class)->setName('getPraticienPlanning')
+        ->add(AuthMiddleware::class);
+    
 
     //Authentification
     $app->post('/users/signin[/]', GenericAuthAction::class)->setName('signin');
     $app->post('/users/register[/]', GenericAuthAction::class)->setName('register');
-    $app->post('/users/refresh[/]', GenericAuthAction::class)->setName('refresh');
+    $app->post('/users/refresh[/]', GenericAuthAction::class)->setName('refresh')
+        ->add(AuthMiddleware::class);
 
     //RDV
-    $app->get('/rdvs[/]', GenericRdvAction::class)->setName('getRDVs');
-    $app->get('/rdvs/{id}[/]', GenericRdvAction::class)->setName('getRDV');
-    $app->post('/rdvs[/]', GenericRdvAction::class)->setName('createRDV');
+    $app->get('/rdvs[/]', GenericRdvAction::class)->setName('getRDVs')
+        ->add(AuthMiddleware::class);
+    $app->get('/rdvs/{id}[/]', GenericRdvAction::class)->setName('getRDV')
+        ->add(AuthMiddleware::class);
+    $app->post('/rdvs[/]', GenericRdvAction::class)->setName('createRDV')
+        ->add(AuthMiddleware::class);
 
     return $app;
 };

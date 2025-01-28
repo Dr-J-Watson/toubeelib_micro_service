@@ -13,8 +13,8 @@ return function( \Slim\App $app): \Slim\App {
     $app->post('/users/signin[/]', SigninAuthAction::class)->setName('signin');
 
     // Rafraîchir le token JWT
-    $app->post('/users/refresh', RefreshTokenAuthAction::class)->setName('refresh');
+    $app->post('/users/refresh[/]', RefreshTokenAuthAction::class)->setName('refresh');
 
-    $app->post('/tokens/validate', ValidateTokenAuthAction::class)->setName('refresh');
+    $app->post('/tokens/validate[/]', ValidateTokenAuthAction::class)->setName('validate');
     return $app;
 };
