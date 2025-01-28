@@ -4,8 +4,8 @@ namespace app_rdv\application\actions;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use toubeelib\core\services\rdv\ServiceRDVInterface;
-use toubeelib\application\renderer\JsonRenderer;
+use app_rdv\core\services\rdv\ServiceRDVInterface;
+use app_rdv\application\renderer\JsonRenderer;
 
 class GetPatientRDVAction extends AbstractAction
 {
@@ -24,7 +24,7 @@ class GetPatientRDVAction extends AbstractAction
             'type' => 'collection',
             'rdvs' => $rdvs
         ];
-        return JsonRenderer::render($rs, 200, $rdvs);
+        return JsonRenderer::render($rs, 200, $data);
     }
 
 

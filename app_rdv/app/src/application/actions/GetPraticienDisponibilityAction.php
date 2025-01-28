@@ -2,9 +2,8 @@
 
 namespace app_rdv\application\actions;
 
-use toubeelib\application\actions\AbstractAction;
-use toubeelib\application\renderer\JsonRenderer;
-use toubeelib\core\services\rdv\ServiceRDVInterface;
+use app_rdv\application\renderer\JsonRenderer;
+use app_rdv\core\services\rdv\ServiceRDVInterface;
 
 class GetPraticienDisponibilityAction extends AbstractAction
 {

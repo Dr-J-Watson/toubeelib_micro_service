@@ -22,21 +22,15 @@ class GetRDVAction extends AbstractAction{
         try{
             $rdv = $this->serviceRDV->getRDVById($args['id']);
 
-            $routeContext = RouteContext::fromRequest($rq);
-            $routeParser = $routeContext->getRouteParser();
-
             $responseContent = [
                 'type' => 'ressources',
                 'rdv' => $rdv,
-//                'links' => [
-//                    'praticien' => $routeParser->urlFor('getPraticien', ['id' => $rdv->practicienID])
-//                ]
             ];
 
             return JsonRenderer::render($rs, 200, $responseContent);
 
         }catch(\Exception $e){
-            throw new \Exception("RDV not found: ".$e->getMessage(), 404);
+            return JsonRenderer::render($rs, 404, ['error' => $e->getMessage()]);
         }
     }
 

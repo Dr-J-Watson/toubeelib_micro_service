@@ -28,6 +28,7 @@ return function( \Slim\App $app): \Slim\App {
     $app->get('/praticiens[/]', GenericPraticienAction::class)->setName('getPraticiens');
     $app->get('/praticiens/{id}[/]', GenericPraticienAction::class)->setName('getPraticien');
     $app->get('/praticiens/{id}/planing[/]', GenericRdvAction::class)->setName('getPraticienPlanning');
+    $app->get('/praticiens/{id}/disponibility[/]', GenericRdvAction::class)->setName('getPraticienDispobilite');
 
     //Authentification
     $app->post('/users/signin[/]', GenericAuthAction::class)->setName('signin');
