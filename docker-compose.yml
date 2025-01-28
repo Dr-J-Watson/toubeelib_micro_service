@@ -9,6 +9,8 @@ volumes:
     driver: local
   app_auth.db:
     driver: local
+  app_mail:
+    driver: local
 
 services:
 
@@ -35,6 +37,21 @@ services:
     ports:
       - '8080:8080'
 
+  # service smtp de test
+  mailcatcher:
+    image: dockage/mailcatcher:latest
+    ports:
+      - "1025:1025"
+      - "1080:1080"
+
+  mail:
+    image: php:8.2-cli
+    volumes:
+      - ./app_mail:/var/php/public
+    depends_on:
+      - rabbitmq
+      - mailcatcher
+    command: php -S 0.0.0.0:80 -t /var/php/public
   # ===================GATEWAY================
 
   gateway:
