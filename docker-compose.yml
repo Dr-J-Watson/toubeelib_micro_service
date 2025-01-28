@@ -156,6 +156,8 @@ services:
       - '6084:80'
     volumes:
       - ./app_auth/app/:/var/php/
+    env_file:
+      - ./env/api.env
     working_dir: /var/php
     command: php -S 0.0.0.0:80 -t /var/php/public
 

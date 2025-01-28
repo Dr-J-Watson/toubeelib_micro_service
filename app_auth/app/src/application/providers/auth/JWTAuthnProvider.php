@@ -2,6 +2,7 @@
 
 namespace app_auth\application\providers\auth;
 
+use Exception;
 use PDO;
 use PhpParser\Token;
 use app_auth\application\providers\auth\AuthnProviderInterface;
@@ -21,16 +22,16 @@ class JWTAuthnProvider implements AuthnProviderInterface{
 
     public function register(CredentialsDTO $credentials, int $role): void{
         if($credentials->password == null || strlen($credentials->password) < 8){
-            throw new \Exception("Password must be at least 8 characters");
+            throw new Exception("Password must be at least 8 characters");
         }
 
         if(filter_var($credentials->email, FILTER_VALIDATE_EMAIL) === false){
-            throw new \Exception("Invalid email");
+            throw new Exception("Invalid email");
         }
 
         $existingUser = $this->getUserByEmail($credentials->email);
         if ($existingUser) {
-            throw new \Exception('Cet utilisateur existe déjà');
+            throw new Exception('Cet utilisateur existe déjà');
         }
 
 
@@ -44,7 +45,7 @@ class JWTAuthnProvider implements AuthnProviderInterface{
             ]);
 
         } catch (\PDOException $e) {
-            throw new \Exception('Erreur lors de l\'enregistrement de l\'utilisateur: ' . $e->getMessage());
+            throw new Exception('Erreur lors de l\'enregistrement de l\'utilisateur: ' . $e->getMessage());
         }
     }
 
@@ -54,12 +55,12 @@ class JWTAuthnProvider implements AuthnProviderInterface{
         $stmt->execute(['email' => $credentials->email]);
         $user = $stmt->fetch();
         if (!$user) {
-            throw new \Exception('Cet utilisateur n\'existe pas');
+            throw new Exception('Cet utilisateur n\'existe pas');
         }
         $payload = [ 'iss'=>'localhost:6080/users/signin',
             'aud'=>'localhost:6080/users/signin',
             'iat'=>time(),
-            'exp'=>time()+3600,
+            'exp'=> 0,
             'sub' => $user['id'],
             'data' => [
                 'role' => $user['role'],
@@ -78,18 +79,28 @@ class JWTAuthnProvider implements AuthnProviderInterface{
 
     public function refresh(string $token): AuthDTO{
 
-        $payload = JWTManager::class->decodeToken($token);
-
-        $token = JWTManager::class->creatAccessToken($payload);
-        $rtoken = JWTManager::class->creatRefreshToken($payload);
+        $jwt = new JWTManager();
+        $payload = $jwt->decodeToken($token);
+        $token = $jwt->creatAccessToken($payload);
+        $rtoken = $jwt->creatRefreshToken($payload);
         $auth = new AuthDTO($payload['sub'], $payload['data']['user'], $payload['data']['role']);
         
         return $auth->addToken($token, $rtoken);
     }
 
+    /**
+     * @param string $token
+     * @return AuthDTO
+     * @throws Exception
+     */
     public function getSignedInUser(string $token): AuthDTO{
-        $payload = JWTManager::class->decodeToken($token);
-        return new AuthDTO($payload['sub'], $payload['data']['user'], $payload['data']['role']);
+        $jwt = new JWTManager();
+        try {
+            $payload = $jwt->decodeToken($token);
+            return new AuthDTO($payload['sub'], $payload['data']['user'], $payload['data']['role']);
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 
     public function getUserByEmail($email): ?array{
