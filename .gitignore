@@ -16,3 +16,5 @@ composer.lock
 logs/*
 # Environment files
 *.env
+# rabbitmq
+rabbitmq_dir

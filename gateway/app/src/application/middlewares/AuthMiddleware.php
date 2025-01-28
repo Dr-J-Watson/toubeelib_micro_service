@@ -15,7 +15,6 @@ try {
         'json' => ['token' => $token]
     ]);
 } catch (ConnectException | ServerException $e) {
-    // Handle connection or server exceptions
     throw new HttpInternalServerErrorException($request, "internal server error ({$e->getCode()}, {$e->getMessage()})");
 } catch (ClientException $e) {
     match($e->getCode()) {
