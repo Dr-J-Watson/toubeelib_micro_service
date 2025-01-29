@@ -2,15 +2,15 @@
 
 namespace gateway\application\middlewares;
 
-use Slim\Exception\HttpUnauthorizedException;
-use Slim\Exception\HttpInternalServerErrorException;
+use GuzzleHttp\Client;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Psr\Http\Message\ResponseInterface as Response;
-use GuzzleHttp\Client;
+use Slim\Exception\HttpUnauthorizedException;
+use Slim\Exception\HttpInternalServerErrorException;
 use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\ClientException;
 
 class AuthMiddleware
 {
@@ -31,11 +31,15 @@ class AuthMiddleware
         }
 
         try {
-        
+            // Vérifiez que le token n'est pas vide ou mal formé
+            if (empty($token) || !is_string($token)) {
+                throw new HttpUnauthorizedException($request, "Invalid token format");
+            }
+
             $response = $this->auth_client->request('POST', '/tokens/validate', [
                 'json' => ['token' => $token]
             ]);
-            
+
         } catch (ConnectException | ServerException $e) {
             throw new HttpInternalServerErrorException($request, "Internal server error ({$e->getCode()}, {$e->getMessage()})");
         } catch (ClientException $e) {

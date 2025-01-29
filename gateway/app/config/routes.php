@@ -30,8 +30,6 @@ return function( \Slim\App $app): \Slim\App {
     $app->get('/praticiens/{id}[/]', GenericPraticienAction::class)->setName('getPraticien');
     $app->get('/praticiens/{id}/planing[/]', GenericRdvAction::class)->setName('getPraticienPlanning')
         ->add(AuthMiddleware::class);
-
-    $app->get('/praticiens/{id}/planing[/]', GenericRdvAction::class)->setName('getPraticienPlanning');
     $app->get('/praticiens/{id}/disponibility[/]', GenericRdvAction::class)->setName('getPraticienDispobilite');
 
     //Authentification
