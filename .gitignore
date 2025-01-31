@@ -13,7 +13,7 @@ cache.properties
 composer.phar
 composer.lock
 # Logs
-logs/*
+logs
 # Environment files
 *.env
 # rabbitmq

@@ -12,6 +12,7 @@ use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpUnauthorizedException;
+use Slim\Exception\HttpMethodNotAllowedException;
 use gateway\core\repositoryInterfaces\RepositoryEntityNotFoundException;
 
 class GenericAuthAction extends AbstractAction{
@@ -31,7 +32,7 @@ class GenericAuthAction extends AbstractAction{
         if ($method === 'POST' || $method === 'PUT' || $method === 'PATCH') {
             $options['json'] = $request->getParsedBody();
         }
-        $auth = $request->getHeader('Authorization') ?? null;
+        $auth = $request->getHeaderLine('Authorization');
         if (!empty($auth)) {
             $options['headers'] = ['Authorization' => $auth];
         }
@@ -44,7 +45,7 @@ class GenericAuthAction extends AbstractAction{
                 400 => throw new HttpInternalServerErrorException($request, $e->getMessage()),
                 401 => throw new HttpUnauthorizedException($request, $e->getMessage()),
                 403 => throw new HttpForbiddenException($request, $e->getMessage()),
-                404 => throw new HttpNotFoundException($request, $e->getMessage()),
+                405 => throw new HttpMethodNotAllowedException($request, $e->getMessage()),
                 500 => throw new HttpInternalServerErrorException($request, $e->getMessage()),
             };
         } catch (RepositoryEntityNotFoundException $e) {
