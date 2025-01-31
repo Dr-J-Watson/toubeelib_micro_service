@@ -3,6 +3,7 @@
 namespace gateway\application\middlewares;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -14,7 +15,7 @@ use GuzzleHttp\Exception\ClientException;
 
 class AuthMiddleware
 {
-    private $auth_client;
+    private Client $auth_client;
 
     public function __construct(Client $auth_client)
     {
@@ -36,9 +37,12 @@ class AuthMiddleware
                 throw new HttpUnauthorizedException($request, "Invalid token format");
             }
 
+            echo "Before request\n";
             $response = $this->auth_client->request('POST', '/tokens/validate', [
                 'json' => ['token' => $token]
             ]);
+            echo "After request\n";
+
 
         } catch (ConnectException | ServerException $e) {
             throw new HttpInternalServerErrorException($request, "Internal server error ({$e->getCode()}, {$e->getMessage()})");
@@ -46,6 +50,8 @@ class AuthMiddleware
             if ($e->getCode() === 401) {
                 throw new HttpUnauthorizedException($request, "Unauthorized ({$e->getCode()}, {$e->getMessage()})");
             }
+        } catch (GuzzleException $e) {
+            throw new HttpInternalServerErrorException($request, "Internal server error ({$e->getCode()}, {$e->getMessage()})");
         }
 
         return $handler->handle($request);

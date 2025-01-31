@@ -3,6 +3,7 @@
 use gateway\application\actions\GenericAuthAction;
 use gateway\application\actions\GenericPraticienAction;
 use gateway\application\actions\GenericRdvAction;
+use gateway\application\middlewares\AuthMiddleware;
 use Psr\Container\ContainerInterface;
 
 return [
@@ -30,7 +31,7 @@ return [
 
     'auth_client' => function(ContainerInterface $c){
         return new GuzzleHttp\Client([
-            'base_uri' => 'http://api.auth:80',
+            'base_uri' => 'http://api.praticiens:80',
             'timeout' => 2.0,
         ]);
     },
@@ -40,6 +41,10 @@ return [
             'base_uri' => 'http://api.rdv:80',
             'timeout' => 2.0,
         ]);
+    },
+
+    AuthMiddleware::class => function(ContainerInterface $c) {
+        return new AuthMiddleware($c->get('auth_client'));
     },
 
     GenericPraticienAction::class => function(ContainerInterface $c) {
