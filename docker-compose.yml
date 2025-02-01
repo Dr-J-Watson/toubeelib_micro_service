@@ -45,13 +45,16 @@ services:
       - "1080:1080"
 
   mail:
-    image: php:8.2-cli
+    build:
+      context: build
+      dockerfile: 8.3-cli.Dockerfile
     volumes:
-      - ./app_mail:/var/php/public
+      - ./app_mail:/var/php/
+    working_dir: /var/php
     depends_on:
       - rabbitmq
       - mailcatcher
-    command: php -S 0.0.0.0:80 -t /var/php/public
+    command: php consumer.php
   # ===================GATEWAY================
 
   gateway:
@@ -132,14 +135,14 @@ services:
         condition: service_healthy
 
 
-  # db.rdv:
-  #   image: 'postgres:latest' 
-  #   env_file: ./env/db.env
-  #   ports:
-  #     - '5434:5432'
-  #   volumes:
-  #     - ./app_rdv/sql/init-postgres:/docker-entrypoint-initdb.d
-  #     - app_rdv.db:/var/lib/postgresql/data
+  db.rdv:
+     image: 'postgres:latest'
+     env_file: ./env/db.env
+     ports:
+       - '5434:5432'
+     volumes:
+       - ./app_rdv/sql/init-postgres:/docker-entrypoint-initdb.d
+       - app_rdv.db:/var/lib/postgresql/data
 
   # ===================PATIENTS================
 

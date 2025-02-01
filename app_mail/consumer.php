@@ -62,10 +62,8 @@ function sendEmail(MailerInterface $mailer, $msg): void
     $email = new Email();
     $email->from('sender@example.com');
     $email->to('recipient@example.com');
-    $email->subject('Sujet de l\'email');
-    $email->text('Contenu texte simple');
-    $email->html($msg);
-
+    $email->subject($msg->event . ' rendez-vous');
+    $email->text('Rendez-vous à '.$msg->rdv->date.' avec '.$msg->rdv->praticient);
     try {
         $mailer->send($email);
     } catch (TransportExceptionInterface $e) {
