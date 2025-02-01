@@ -39,6 +39,7 @@ class ServiceRDV implements ServiceRDVInterface{
     public function createRDV(InputRDVDTO $p): RDVDTO{
         $rdv = new RDV($p->getPraticienID(),$p->getPatientID(), $p->getType(), $p->getDateHeure());
         $rdv->setID(Uuid::uuid4());
+        $rdv->setPraticien($this->servicePraticiensAdapter->getPraticienById($rdv->getPraticienId()));
         $this->rdvRepository->save($rdv);
         $this->logger->info('RDV created: ',['rdv' => $rdv]);
         return $rdv->toDTO();

@@ -24,7 +24,7 @@ class RabbitMQRdvMessageSender implements RdvMessageSenderInterface
 
     public function sendMessage(RDVDTO $rdv, string $event): void
     {
-        $msg = new AMQPMessage(json_encode(['event' => $event, 'rdv' => $rdv->jsonSerialize()]));
+        $msg = new AMQPMessage(json_encode(['event' => $event, 'rdv' => json_encode($rdv)]));
         $this->channel->basic_publish($msg, $this->exchange);
     }
 

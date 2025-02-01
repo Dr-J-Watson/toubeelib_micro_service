@@ -37,12 +37,9 @@ class AuthMiddleware
                 throw new HttpUnauthorizedException($request, "Invalid token format");
             }
 
-            echo "Before request\n";
             $response = $this->auth_client->request('POST', '/tokens/validate', [
                 'json' => ['token' => $token]
             ]);
-            echo "After request\n";
-
 
         } catch (ConnectException | ServerException $e) {
             throw new HttpInternalServerErrorException($request, "Internal server error ({$e->getCode()}, {$e->getMessage()})");
